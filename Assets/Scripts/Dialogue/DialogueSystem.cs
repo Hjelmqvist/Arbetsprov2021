@@ -1,23 +1,106 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class DialogueSystem : MonoSingleton<DialogueSystem>
 {
+    [SerializeField] GameObject dialoguePanel = null;
+    [SerializeField] TextMeshProUGUI characterNameBox = null;
     [SerializeField] TextMeshProUGUI messageBox = null;
-    [SerializeField] GameObject optionButtonPrefab = null;
+    [SerializeField] Transform buttonsParent = null;
+    [SerializeField] Button choiceButtonPrefab = null;
 
-    DialogueMessage currentMessage = null;
+    [SerializeField] float printSpeed = 0.1f;
 
-    public void PlayDialogue(DialogueMessage[] messages, DialogueOption[] options)
+    Queue<DialogueMessage> dialogueMessages = new Queue<DialogueMessage>();
+    List<DialogueChoice> dialogueChoices = new List<DialogueChoice>();
+
+    Action OnPrintCompleted = null;
+
+    bool exitDialogue = false;
+
+    /// <summary>
+    /// Setup and play dialogue
+    /// </summary>
+    public void StartDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
     {
-        // Open dialogue window
-        // Print letters
+        exitDialogue = false;
+        ClearDialogue();
+
+        for (int i = 0; i < messages.Length; i++)
+            dialogueMessages.Enqueue(messages[i]);
+        dialogueChoices.AddRange(choices);
+
+        NextDialogue();
+        dialoguePanel.SetActive(true);
     }
 
-    public void ExitDialogue(DialogueMessage[] messages)
+    /// <summary>
+    /// Plays the next dialogue message from the queue
+    /// </summary>
+    public void NextDialogue()
     {
-        // Close dialogue window
+        ClearDialogue();
+
+        if (dialogueMessages.Count > 0)
+        {
+            DialogueMessage dialogue = dialogueMessages.Dequeue();
+            characterNameBox.text = dialogue.character;
+
+            // Only one print coroutine at a time
+            StopAllCoroutines();
+            StartCoroutine(PrintMessage(dialogue.message));
+
+            // Load the buttons if it was the last dialogue message
+            if (dialogueMessages.Count == 0)
+                OnPrintCompleted += CreateButtons;
+        }
+        else if (exitDialogue)
+            dialoguePanel.SetActive(false);
+    }
+
+    /// <summary>
+    /// Creates buttons for the dialogue choices
+    /// </summary>
+    private void CreateButtons()
+    {
+        for (int i = dialogueChoices.Count - 1; i >= 0; i--)
+        {
+            DialogueChoice choice = dialogueChoices[i];
+            Button newButton = Instantiate(choiceButtonPrefab, buttonsParent);
+            newButton.onClick.AddListener(choice.Execute);
+            TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
+            buttonText.text = $"\"{choice.Message}\"";
+        }
+        dialogueChoices.Clear();
+    }
+
+    /// <summary>
+    /// Loads in the last couple messages and closes the dialogue window when they are done
+    /// </summary>
+    public void EndDialogue(DialogueMessage[] messages)
+    {
+        exitDialogue = true;
+        dialogueMessages.Clear();
+        for (int i = 0; i < messages.Length; i++)
+            dialogueMessages.Enqueue(messages[i]);
+        NextDialogue();
+    }
+
+    /// <summary>
+    /// Resets all UI elements
+    /// </summary>
+    private void ClearDialogue()
+    {
+        characterNameBox.text = "";
+        messageBox.text = "";
+
+        // Remove all buttons
+        for (int i = buttonsParent.childCount - 1; i >= 0; i--)
+            Destroy(buttonsParent.GetChild(i).gameObject);
     }
 
     IEnumerator PrintMessage(string message)
@@ -26,7 +109,9 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
         for (int i = 0; i < message.Length; i++)
         {
             messageBox.text += message[i];
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForSeconds(printSpeed);
         }
+        OnPrintCompleted?.Invoke();
+        OnPrintCompleted = null;
     }
 }

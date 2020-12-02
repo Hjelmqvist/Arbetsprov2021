@@ -3,7 +3,7 @@
 [System.Serializable]
 public class DialogueMessage
 {
-    [SerializeField] string character;
-    [SerializeField] string message;
-    [SerializeField] string animation;
+    public string character;
+    [TextArea(2, 5)]
+    public string message;
 }

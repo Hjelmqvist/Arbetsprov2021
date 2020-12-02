@@ -10,10 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3aa19df12d4a254ca307c54f69f0259, type: 3}
-  m_Name: New Dialogue
+  m_Name: TestDialogue2
   m_EditorClassIdentifier: 
   messages:
-  - characterName: 
-    message: 
-    somethingForAnimations: 
-  options: []
+  - character: Bob2
+    message: This is the continuation
+  choices:
+  - message: Back to first
+    connectingDialogue: {fileID: 11400000, guid: 698baf70e2a3e8b458f21350e2739f4c,
+      type: 2}
+  - message: End
+    connectingDialogue: {fileID: 11400000, guid: 99c95e98c8e1a5146ad70b1c14141fec,
+      type: 2}

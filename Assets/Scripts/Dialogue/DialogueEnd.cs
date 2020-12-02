@@ -7,6 +7,6 @@ public class DialogueEnd : DialogueNode
 
     public override void Execute()
     {
-        DialogueSystem.Instance.ExitDialogue(messages);
+        DialogueSystem.Instance.EndDialogue(messages);
     }
 }

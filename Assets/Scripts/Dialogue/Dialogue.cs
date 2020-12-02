@@ -4,10 +4,10 @@
 public class Dialogue : DialogueNode
 {
     [SerializeField] DialogueMessage[] messages = null;
-    [SerializeField] DialogueOption[] options = null;
+    [SerializeField] DialogueChoice[] choices = null;
 
     public override void Execute()
     {
-        DialogueSystem.Instance.PlayDialogue(messages, options);
+        DialogueSystem.Instance.StartDialogue(messages, choices);
     }
 }
