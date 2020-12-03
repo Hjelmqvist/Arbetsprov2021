@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// The class to take care of the dialogue UI.
+/// </summary>
 public class DialogueSystem : MonoSingleton<DialogueSystem>
 {
     [SerializeField] GameObject dialoguePanel = null;
@@ -18,6 +21,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     Queue<DialogueMessage> dialogueMessages = new Queue<DialogueMessage>();
     List<DialogueChoice> dialogueChoices = new List<DialogueChoice>();
 
+    Action OnEndOfDialogue = null;
     Action OnPrintCompleted = null;
 
     bool exitDialogue = false;
@@ -27,7 +31,6 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     /// </summary>
     public void StartDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
     {
-        exitDialogue = false;
         ClearDialogue();
 
         for (int i = 0; i < messages.Length; i++)
@@ -43,10 +46,10 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     /// </summary>
     public void NextDialogue()
     {
-        ClearDialogue();
-
         if (dialogueMessages.Count > 0)
         {
+            ClearDialogue();
+
             DialogueMessage dialogue = dialogueMessages.Dequeue();
             characterNameBox.text = dialogue.character;
 
@@ -58,8 +61,8 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             if (dialogueMessages.Count == 0)
                 OnPrintCompleted += CreateButtons;
         }
-        else if (exitDialogue)
-            dialoguePanel.SetActive(false);
+        else
+            OnEndOfDialogue?.Invoke();
     }
 
     /// <summary>
@@ -67,6 +70,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     /// </summary>
     private void CreateButtons()
     {
+        OnPrintCompleted -= CreateButtons;
         for (int i = dialogueChoices.Count - 1; i >= 0; i--)
         {
             DialogueChoice choice = dialogueChoices[i];
@@ -83,11 +87,21 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     /// </summary>
     public void EndDialogue(DialogueMessage[] messages)
     {
-        exitDialogue = true;
+        OnEndOfDialogue += CloseDialogue;
+        CloseDialogue();
         dialogueMessages.Clear();
         for (int i = 0; i < messages.Length; i++)
             dialogueMessages.Enqueue(messages[i]);
         NextDialogue();
+    }
+
+    /// <summary>
+    /// Close the dialogue window
+    /// </summary>
+    private void CloseDialogue()
+    {
+        OnEndOfDialogue -= CloseDialogue;
+        dialoguePanel.SetActive(false);
     }
 
     /// <summary>
@@ -112,6 +126,5 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             yield return new WaitForSeconds(printSpeed);
         }
         OnPrintCompleted?.Invoke();
-        OnPrintCompleted = null;
     }
 }
