@@ -661,7 +661,7 @@ MonoBehaviour:
   characterNameBox: {fileID: 2496164842383780288}
   messageBox: {fileID: 2496164841407406921}
   buttonsParent: {fileID: 2496164842636720129}
-  optionButtonPrefab: {fileID: 2419279364756132473, guid: 775b3dd1e5dea0f47b6bde2fcacb3650,
+  choiceButtonPrefab: {fileID: 2419279364756132473, guid: 775b3dd1e5dea0f47b6bde2fcacb3650,
     type: 3}
   printSpeed: 0.02
 --- !u!1 &2496164842636720134

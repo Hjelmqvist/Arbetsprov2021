@@ -24,8 +24,6 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     Action OnEndOfDialogue = null;
     Action OnPrintCompleted = null;
 
-    bool exitDialogue = false;
-
     /// <summary>
     /// Setup and play dialogue
     /// </summary>
