@@ -13,6 +13,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     [SerializeField] GameObject dialoguePanel = null;
     [SerializeField] TextMeshProUGUI characterNameBox = null;
     [SerializeField] TextMeshProUGUI messageBox = null;
+    [SerializeField] Button nextButton = null;
     [SerializeField] Transform buttonsParent = null;
     [SerializeField] Button choiceButtonPrefab = null;
 
@@ -21,8 +22,12 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     Queue<DialogueMessage> dialogueMessages = new Queue<DialogueMessage>();
     List<DialogueChoice> dialogueChoices = new List<DialogueChoice>();
 
+    // Local events
     Action OnEndOfDialogue = null;
     Action OnPrintCompleted = null;
+
+    public static Action OnDialogueStart = null;
+    public static Action OnDialogueEnd = null;
 
     /// <summary>
     /// Setup and play dialogue
@@ -37,6 +42,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
 
         NextDialogue();
         dialoguePanel.SetActive(true);
+        OnDialogueStart?.Invoke();
     }
 
     /// <summary>
@@ -54,6 +60,8 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             // Only one print coroutine at a time
             StopAllCoroutines();
             StartCoroutine(PrintMessage(dialogue.message));
+
+            nextButton.gameObject.SetActive(dialogueMessages.Count > 0);
 
             // Load the buttons if it was the last dialogue message
             if (dialogueMessages.Count == 0)
@@ -100,6 +108,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     {
         OnEndOfDialogue -= CloseDialogue;
         dialoguePanel.SetActive(false);
+        OnDialogueEnd?.Invoke();
     }
 
     /// <summary>

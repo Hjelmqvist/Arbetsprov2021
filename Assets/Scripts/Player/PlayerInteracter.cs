@@ -5,19 +5,23 @@
 /// </summary>
 public class PlayerInteracter : MonoBehaviour
 {
+    [SerializeField] KeyCode interactKey = default;
     [SerializeField] Vector3 boxSize = Vector3.one;
     [SerializeField] float range = 2f;
     [SerializeField] LayerMask layers = default;
     
     void Update()
     {
-        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxSize / 2, transform.forward, transform.rotation, range, layers);
-        for (int i = 0; i < hits.Length; i++)
+        if (Input.GetKeyDown(interactKey))
         {
-            if (hits[i].transform.TryGetComponent(out IInteractable interactable))
+            RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxSize / 2, transform.forward, transform.rotation, range, layers);
+            for (int i = 0; i < hits.Length; i++)
             {
-                Debug.Log(hits[i].transform.name);
-                break;
+                if (hits[i].transform.TryGetComponent(out IInteractable interactable))
+                {
+                    interactable.Interact();
+                    break;
+                }
             }
         }
     }
