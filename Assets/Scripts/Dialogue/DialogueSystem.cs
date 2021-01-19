@@ -22,12 +22,9 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     Queue<DialogueMessage> dialogueMessages = new Queue<DialogueMessage>();
     List<DialogueChoice> dialogueChoices = new List<DialogueChoice>();
 
-    // Local events
-    Action OnEndOfDialogue = null;
-    Action OnPrintCompleted = null;
-
     public static Action OnDialogueStart = null;
     public static Action OnDialogueEnd = null;
+    Action OnPrintCompleted = null;
 
     /// <summary>
     /// Setup and play dialogue
@@ -66,9 +63,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             // Load the buttons if it was the last dialogue message
             if (dialogueMessages.Count == 0)
                 OnPrintCompleted += CreateButtons;
-        }
-        else
-            OnEndOfDialogue?.Invoke();
+        }  
     }
 
     /// <summary>
@@ -93,22 +88,18 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     /// </summary>
     public void EndDialogue(DialogueMessage[] messages)
     {
-        OnEndOfDialogue += CloseDialogue;
-        CloseDialogue();
         dialogueMessages.Clear();
         for (int i = 0; i < messages.Length; i++)
             dialogueMessages.Enqueue(messages[i]);
-        NextDialogue();
+        OnDialogueEnd?.Invoke();
     }
 
     /// <summary>
     /// Close the dialogue window
     /// </summary>
     private void CloseDialogue()
-    {
-        OnEndOfDialogue -= CloseDialogue;
+    { 
         dialoguePanel.SetActive(false);
-        OnDialogueEnd?.Invoke();
     }
 
     /// <summary>
@@ -133,5 +124,15 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             yield return new WaitForSeconds(printSpeed);
         }
         OnPrintCompleted?.Invoke();
+    }
+
+    private void OnEnable()
+    {
+        OnDialogueEnd += CloseDialogue;
+    }
+
+    private void OnDisable()
+    {
+        OnDialogueEnd -= CloseDialogue;
     }
 }
