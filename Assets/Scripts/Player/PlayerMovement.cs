@@ -1,17 +1,28 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1;
+
+    CharacterController controller = null;
     bool canMove = true;
+
+    private void Start()
+    {
+        controller = GetComponent<CharacterController>();
+    }
 
     void Update()
     {
         if (canMove && TryGetMoveDirection(out Vector3 moveDir))
         {
-            transform.position += moveDir * movementSpeed * Time.deltaTime;
+            controller.Move(moveDir * movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.LookRotation(moveDir);
         }
+        
+        // Simple gravity
+        controller.Move(Physics.gravity * Time.deltaTime);
     }
 
     /// <summary>

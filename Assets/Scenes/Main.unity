@@ -132,6 +132,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: tile-plain
       objectReference: {fileID: 0}
+    - target: {fileID: 1871174464052898, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4755125321900414, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -188,6 +192,10 @@ PrefabInstance:
     - target: {fileID: 1075509480121184, guid: 494957db1966c4528a98d8c72a75f577, type: 3}
       propertyPath: m_Name
       value: tile-mainroad-straight (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075509480121184, guid: 494957db1966c4528a98d8c72a75f577, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4377977572423060, guid: 494957db1966c4528a98d8c72a75f577, type: 3}
       propertyPath: m_LocalPosition.x
@@ -252,6 +260,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: soccer-gate
       objectReference: {fileID: 0}
+    - target: {fileID: 1791060574948046, guid: 5e474b838d26b438aa7e30d73caec266, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4907078351955738, guid: 5e474b838d26b438aa7e30d73caec266, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -314,6 +326,10 @@ PrefabInstance:
     - target: {fileID: 1871174464052898, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
       propertyPath: m_Name
       value: tile-plain (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871174464052898, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4755125321900414, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -378,9 +394,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: soccer-gate (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1791060574948046, guid: 5e474b838d26b438aa7e30d73caec266, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4907078351955738, guid: 5e474b838d26b438aa7e30d73caec266, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -25
+      value: -15.02
       objectReference: {fileID: 0}
     - target: {fileID: 4907078351955738, guid: 5e474b838d26b438aa7e30d73caec266, type: 3}
       propertyPath: m_LocalPosition.y
@@ -456,6 +476,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 875595845, guid: 117d681b39c6d432eb8ada77965ceac7, type: 3}
+      propertyPath: movementSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 875595845, guid: 117d681b39c6d432eb8ada77965ceac7, type: 3}
+      propertyPath: gravityValue
+      value: -9.82
+      objectReference: {fileID: 0}
     - target: {fileID: 1318180670402888, guid: 117d681b39c6d432eb8ada77965ceac7, type: 3}
       propertyPath: m_Name
       value: Player
@@ -504,51 +532,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 136292118154361970, guid: 117d681b39c6d432eb8ada77965ceac7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 117d681b39c6d432eb8ada77965ceac7, type: 3}
---- !u!1 &875595844 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1318180670402888, guid: 117d681b39c6d432eb8ada77965ceac7,
-    type: 3}
-  m_PrefabInstance: {fileID: 715292544}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &875595845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875595844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7735e81afd65151428e6848255df92b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 5
 --- !u!4 &875595849 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4516325308585860, guid: 117d681b39c6d432eb8ada77965ceac7,
     type: 3}
   m_PrefabInstance: {fileID: 715292544}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &875595850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875595844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc3c3c120a3a69f4cb10be8b0ff1dd13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactKey: 102
-  boxSize: {x: 1, y: 1, z: 1}
-  range: 2
-  layers:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &882633588
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +626,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &943428386
 Transform:
@@ -866,7 +862,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4026185362238246, guid: 106db0498aa0841858844b03cd6efeeb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 4026185362238246, guid: 106db0498aa0841858844b03cd6efeeb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -907,6 +903,11 @@ PrefabInstance:
     - target: {fileID: 4026185362238246, guid: 106db0498aa0841858844b03cd6efeeb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 135739259041624262, guid: 106db0498aa0841858844b03cd6efeeb,
+        type: 3}
+      propertyPath: m_Material
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 106db0498aa0841858844b03cd6efeeb, type: 3}
@@ -1013,6 +1014,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: tile-mainroad-straight
       objectReference: {fileID: 0}
+    - target: {fileID: 1075509480121184, guid: 494957db1966c4528a98d8c72a75f577, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4377977572423060, guid: 494957db1966c4528a98d8c72a75f577, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1076,6 +1081,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building-restaurant
       objectReference: {fileID: 0}
+    - target: {fileID: 1145744080872588, guid: 0eb6e1c93aab2ec47b5068e5e2119d81, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4322010636155444, guid: 0eb6e1c93aab2ec47b5068e5e2119d81, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8
@@ -1132,6 +1141,10 @@ PrefabInstance:
     - target: {fileID: 1871174464052898, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
       propertyPath: m_Name
       value: tile-plain (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871174464052898, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4755125321900414, guid: ad9d3c1bf87264ed8a89c188f2c1018c, type: 3}
       propertyPath: m_LocalPosition.x
