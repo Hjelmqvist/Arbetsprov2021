@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Dialogues/Dialogue")]
+[CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogues/Dialogue")]
 public class Dialogue : DialogueNode
 {
     [SerializeField] DialogueMessage[] messages = null;
@@ -9,7 +9,7 @@ public class Dialogue : DialogueNode
     [Tooltip("Reverse order so that new choices shows up at the top, like new quests being added")] 
     [SerializeField] DialogueChoice[] choices = null;
 
-    public override void Execute()
+    public override void SelectNode()
     {
         DialogueSystem.Instance.StartDialogue(messages, choices);
     }

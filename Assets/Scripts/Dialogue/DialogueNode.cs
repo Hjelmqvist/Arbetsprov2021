@@ -5,5 +5,5 @@
 /// </summary>
 public abstract class DialogueNode : ScriptableObject
 {
-    public abstract void Execute();
+    public abstract void SelectNode();
 }

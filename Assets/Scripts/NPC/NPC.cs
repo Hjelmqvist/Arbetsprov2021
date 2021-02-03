@@ -21,6 +21,6 @@ public class NPC : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (npcDialogue)
-            npcDialogue.Execute();
+            npcDialogue.SelectNode();
     }
 }
