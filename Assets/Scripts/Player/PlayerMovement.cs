@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, ISaveable
 {
     [SerializeField] float movementSpeed = 1;
 
@@ -71,5 +71,19 @@ public class PlayerMovement : MonoBehaviour
     private void OnDialogueEnd()
     {
         canMove = true;
+    }
+
+    public object CaptureState()
+    {
+        return new SerializeableVector3(transform.position);
+    }
+
+    public void RestoreState(object state)
+    {
+        SerializeableVector3 pos = (SerializeableVector3)state;
+        if (pos != null)
+        {
+            transform.position = pos.GetVector3();
+        }
     }
 }
