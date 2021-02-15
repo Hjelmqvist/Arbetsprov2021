@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b5b0ba54451dd94c818416fb48110f5, type: 3}
-  m_Name: ItemTest
+  m_Script: {fileID: 11500000, guid: 199e816cff8ee8a4a8e4e7876caad103, type: 3}
+  m_Name: Banana
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  itemName: Banana
+  description: A yellow curved fruit.
   icon: {fileID: 0}
+  stackSize: 1

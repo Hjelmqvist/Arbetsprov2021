@@ -2,32 +2,35 @@
 
 /// <summary>
 /// Unique values for an instance of an item.
-/// 
 /// </summary>
 [System.Serializable]
 public class Item
 {
-    [SerializeField] string itemName = "";
+    [SerializeField] string displayName = "";
 
-    ItemSO itemSO = null;
-    InventorySlot currentInventorySlot = null;
+    // Do not try to save the ScriptableObject to file
+    [System.NonSerialized] ItemSO itemSO = null;
 
-    public string DisplayName => itemName;
+    public virtual string DisplayName => displayName;
 
-    public ItemSO ItemInformation()
+    public bool TryGetInformation<T>(out T information) where T : ItemSO
     {
-        if (itemSO == null && ItemSO.TryGetItem(itemName, out ItemSO item))
+        information = (T)itemSO;
+        if (itemSO == null && ItemSO.TryGetItem(displayName, out T item))
+        {
             itemSO = item;
-        return itemSO;
+            information = item;
+        }
+        return information != null;
     }
 
     public Item(string name)
     {
-        itemName = name;
+        displayName = name;
     }
 
-    public virtual void Use()
+    public virtual void Use(GameObject user)
     {
-        Debug.Log(itemName + " was used.");
+        Debug.Log(displayName + " was used.");
     }
 }

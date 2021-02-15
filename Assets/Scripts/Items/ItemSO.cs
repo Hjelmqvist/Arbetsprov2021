@@ -7,12 +7,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
 public class ItemSO : ScriptableObject
 {
-    [SerializeField] string displayName = null;
+    [SerializeField] string itemName = null;
     [SerializeField, TextArea(1, 3)] string description = null;
     [SerializeField] Sprite icon = null;
     [SerializeField] int stackSize = 1;
 
-    public string DisplayName => displayName;
+    public string ItemName => itemName;
     public string Description => description;
     public Sprite Icon => icon;
     public bool IsStackable(out int stackSize)
@@ -23,7 +23,7 @@ public class ItemSO : ScriptableObject
 
     static Dictionary<string, ItemSO> itemDatabase = null;
 
-    public static bool TryGetItem(string itemID, out ItemSO foundItem)
+    public static bool TryGetItem<T>(string itemID, out T foundItem) where T : ItemSO
     {
         if (itemDatabase == null)
         {
@@ -31,11 +31,16 @@ public class ItemSO : ScriptableObject
             ItemSO[] allItems = Resources.LoadAll<ItemSO>("");
             foreach (ItemSO item in allItems)
             {
-                if (!itemDatabase.ContainsKey(item.displayName))
-                    itemDatabase[item.displayName] = item;
+                if (!itemDatabase.ContainsKey(item.itemName))
+                    itemDatabase[item.itemName] = item;
             }
         }
-        foundItem = itemDatabase[itemID];
+        foundItem = (T)itemDatabase[itemID];
         return foundItem != null;
+    }
+
+    public virtual Item GetItemInstance()
+    {
+        return new Item(itemName);
     }
 }

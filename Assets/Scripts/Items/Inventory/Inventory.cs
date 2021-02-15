@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class Inventory
 {
     [SerializeField] int slotCount = 32;
 
-    InventorySlot[] slots = null;
+    [SerializeField] InventorySlot[] slots = null;
 
     public bool TryGetItem(int slot, out Item item)
     {

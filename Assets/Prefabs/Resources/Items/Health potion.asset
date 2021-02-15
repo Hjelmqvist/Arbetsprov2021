@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5108c7b70dc00b418392a30be08b3dd, type: 3}
-  m_Name: WeaponTest
+  m_Script: {fileID: 11500000, guid: de5aafc30daa3e045b02a7169e80395e, type: 3}
+  m_Name: Health potion
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  itemName: Health Potion
+  description: Restores 100 HP.
   icon: {fileID: 0}
-  baseAttack: 42
-  enhancement: 0
-  enhancementValue: 20
+  stackSize: 1
+  effects:
+  - effect: 0
+    value: 100

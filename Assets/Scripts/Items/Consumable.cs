@@ -2,17 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Consumable : MonoBehaviour
+[System.Serializable]
+public class Consumable : Item
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Consumable(string name) : base(name) { }
 
-    // Update is called once per frame
-    void Update()
+    public override void Use(GameObject user)
     {
-        
+        if (user.TryGetComponent(out PlayerStats stats) && TryGetInformation(out ConsumableSO information))
+        {
+            foreach (ConsumableEffect effect in information.Effects)
+            {
+                switch (effect.Effect)
+                {
+                    case ConsumableEffect.EffectType.Healing:
+                        stats.ModifyHealth(effect.Value);
+                        break;
+                    default:
+                        Debug.Log("Invalid ConsumableEffect.", information);
+                        break;
+                }
+            }
+        }
     }
 }

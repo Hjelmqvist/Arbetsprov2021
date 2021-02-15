@@ -11,4 +11,9 @@ public class WeaponSO : ItemSO
     [SerializeField] float secondaryValue = 20;
 
     public enum Enhancement { CritRate, CritDmg, EleMastery, Recharge, Atk }
+
+    public override Item GetItemInstance()
+    {
+        return new Weapon(ItemName);
+    }
 }

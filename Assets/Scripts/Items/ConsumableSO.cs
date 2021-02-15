@@ -1,18 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ConsumableSO : MonoBehaviour
+[CreateAssetMenu(fileName = "New Consumable", menuName = "Items/Consumable")]
+public class ConsumableSO : ItemSO
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] ConsumableEffect[] effects = null;
 
-    // Update is called once per frame
-    void Update()
+    public ConsumableEffect[] Effects => effects;
+
+    public override Item GetItemInstance()
     {
-        
+        return new Consumable(ItemName);
     }
 }
