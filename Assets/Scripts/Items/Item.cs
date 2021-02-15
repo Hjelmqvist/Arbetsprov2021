@@ -1,53 +1,33 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
-public class Item : ScriptableObject, ISerializationCallbackReceiver
+/// <summary>
+/// Unique values for an instance of an item.
+/// 
+/// </summary>
+[System.Serializable]
+public class Item
 {
-    [SerializeField] string itemID = null;
-    [SerializeField] string displayName = null;
-    [SerializeField, TextArea(1, 3)] string description = null;
-    [SerializeField] Sprite icon = null;
-    [SerializeField] int stackSize = 1;
+    [SerializeField] string itemName = "";
 
-    public string ItemID => itemID;
-    public string DisplayName => displayName;
-    public string Description => description;
-    public Sprite Icon => icon;
-    public bool IsStackable(out int stackSize)
+    ItemSO itemSO = null;
+    InventorySlot currentInventorySlot = null;
+
+    public string DisplayName => itemName;
+
+    public ItemSO ItemInformation()
     {
-        stackSize = this.stackSize;
-        return stackSize > 1;
+        if (itemSO == null && ItemSO.TryGetItem(itemName, out ItemSO item))
+            itemSO = item;
+        return itemSO;
     }
 
-    static Dictionary<string, Item> itemDatabase = null;
-
-    public static bool TryGetItem<T>(string itemID, out T foundItem) where T : Item
+    public Item(string name)
     {
-        if (itemDatabase == null)
-        {
-            itemDatabase = new Dictionary<string, Item>();
-            Item[] allItems = Resources.LoadAll<Item>("");
-            foreach (Item item in allItems)
-            {
-                if (!itemDatabase.ContainsKey(item.itemID))
-                    itemDatabase[item.itemID] = item;
-            }
-        }
-        foundItem = (T)itemDatabase[itemID];
-        return foundItem != null;
+        itemName = name;
     }
 
-    public void OnBeforeSerialize()
+    public virtual void Use()
     {
-        if (string.IsNullOrEmpty(itemID))
-        {
-            itemID = System.Guid.NewGuid().ToString();
-        }
-    }
-
-    public void OnAfterDeserialize()
-    {
-        
+        Debug.Log(itemName + " was used.");
     }
 }

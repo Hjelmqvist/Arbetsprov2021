@@ -13,11 +13,6 @@ public static class SaveManager
     public static Action OnCaptureState;
     public static Action OnSavefileLoaded;
 
-    public static void EmptyCache()
-    {
-        saveData = new Dictionary<string, object>();
-    }
-
     public static void CaptureState(string id, object data)
     {
         if (!string.IsNullOrEmpty(id))
@@ -37,7 +32,6 @@ public static class SaveManager
 
     public static void SaveFile()
     {
-        Debug.Log("Saving at " + GetSaveLocation());
         using (FileStream file = File.Open(GetSaveLocation(), FileMode.OpenOrCreate))
         {
             BinaryFormatter bf = new BinaryFormatter();
@@ -55,7 +49,16 @@ public static class SaveManager
                 BinaryFormatter formatter = new BinaryFormatter();
                 saveData = (Dictionary<string, object>)formatter.Deserialize(file);
             }
+            OnSavefileLoaded?.Invoke();
         }
-        OnSavefileLoaded?.Invoke();
+    }
+
+    public static void DeleteSavefile()
+    {
+        string filePath = GetSaveLocation();
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
     }
 }
