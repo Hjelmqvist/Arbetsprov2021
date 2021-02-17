@@ -15,8 +15,9 @@ public class Consumable : Item
             {
                 switch (effect.Effect)
                 {
-                    case ConsumableEffect.EffectType.Healing:
-                        stats.ModifyHealth(effect.Value);
+                    case ConsumableEffect.EffectType.Strength:
+                        break;
+                    case ConsumableEffect.EffectType.Intelligence:
                         break;
                     default:
                         Debug.Log("Invalid ConsumableEffect.", information);

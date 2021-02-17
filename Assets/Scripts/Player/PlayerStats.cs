@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IStats
 {
-    [SerializeField] int maxHealth = 100;
+    [SerializeField] CharacterBase characterBase = null;
 
-    int currentHealth = 100;
-
-    public void ModifyHealth(int value)
+    public int GetStatValue(StatType stat)
     {
-        currentHealth = Mathf.Clamp(currentHealth + value, 0, maxHealth);
+        return 0;
     }
 }
