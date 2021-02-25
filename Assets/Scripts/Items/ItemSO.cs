@@ -35,7 +35,7 @@ public class ItemSO : ScriptableObject
                     itemDatabase[item.itemName] = item;
             }
         }
-        foundItem = (T)itemDatabase[itemID];
+        foundItem = itemDatabase.TryGetValue(itemID, out ItemSO value) ? (T)value : null;
         return foundItem != null;
     }
 

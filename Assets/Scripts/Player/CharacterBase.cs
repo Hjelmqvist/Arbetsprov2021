@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum StatType { Strength, Intelligence, Dexterity }
+public enum StatType { Strength, Intelligence }
 
 /// <summary>
 /// Base stats for a character/class
@@ -21,7 +21,7 @@ public partial class CharacterBase : ScriptableObject
     /// Returns the value of a specific stat.
     /// If the stat does not exist it should return a 0.
     /// </summary>
-    public int TryGetStatValue(StatType stat)
+    public int GetStatValue(StatType stat)
     {
         if (stats == null)
         {
@@ -30,7 +30,7 @@ public partial class CharacterBase : ScriptableObject
                 { StatType.Strength, strength },
                 { StatType.Intelligence, intelligence }
             };
-        }
-        return stats[stat];
+        } 
+        return stats.TryGetValue(stat, out int value) ? value : 0;
     }
 }
