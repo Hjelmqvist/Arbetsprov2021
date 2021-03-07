@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveManager
 {
@@ -21,44 +21,46 @@ public static class SaveManager
 
     public static bool TryRestoreState<T>(string id, out T data)
     {
-        data = (T)saveData[id];
+        data = default;
+        if (saveData.TryGetValue(id, out object value))
+            data = (T)value;
         return data != null;
     }
 
     public static string GetSaveLocation()
     {
-        return $"{Application.persistentDataPath}/{SAVEFILENAME}";
+        return Path.Combine(Application.persistentDataPath, SAVEFILENAME);
     }
 
-    public static void SaveFile()
+    public static void SaveGame()
     {
-        using (FileStream file = File.Open(GetSaveLocation(), FileMode.OpenOrCreate))
+        using (FileStream stream = File.Open(GetSaveLocation(), FileMode.OpenOrCreate))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(file, saveData);
+            bf.Serialize(stream, saveData);
         }
     }
 
-    public static void LoadFile()
+    public static bool LoadGame()
     {
         string filePath = GetSaveLocation();
         if (File.Exists(filePath))
         {
-            using (FileStream file = File.Open(filePath, FileMode.Open))
+            using (FileStream stream = File.Open(filePath, FileMode.Open))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                saveData = (Dictionary<string, object>)formatter.Deserialize(file);
+                saveData = (Dictionary<string, object>)formatter.Deserialize(stream);
             }
             OnSavefileLoaded?.Invoke();
+            return true;
         }
+        return false;
     }
 
     public static void DeleteSavefile()
     {
         string filePath = GetSaveLocation();
         if (File.Exists(filePath))
-        {
             File.Delete(filePath);
-        }
     }
 }

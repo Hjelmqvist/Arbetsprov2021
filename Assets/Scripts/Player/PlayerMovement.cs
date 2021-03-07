@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : MonoBehaviour, ISaveable
+public class PlayerMovement : MonoBehaviour, ISavable
 {
     [SerializeField] float movementSpeed = 1;
 
@@ -20,8 +20,6 @@ public class PlayerMovement : MonoBehaviour, ISaveable
             controller.Move(moveDir * movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.LookRotation(moveDir);
         }
-        
-        // Simple gravity
         controller.Move(Physics.gravity * Time.deltaTime);
     }
 

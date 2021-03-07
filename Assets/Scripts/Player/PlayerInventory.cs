@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour, ISaveable
+public class PlayerInventory : MonoBehaviour, ISavable
 {
     [SerializeField] int slotCount = 32;
 

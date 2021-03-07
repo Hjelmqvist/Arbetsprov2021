@@ -1,4 +1,4 @@
-﻿public interface ISaveable
+﻿public interface ISavable
 {
     object CaptureState();
     void RestoreState(object state);

@@ -9,9 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abea1c9408c09e84399dcec428e448cf, type: 3}
-  m_Name: TestEnd
+  m_Script: {fileID: 11500000, guid: a3aa19df12d4a254ca307c54f69f0259, type: 3}
+  m_Name: Continuation
   m_EditorClassIdentifier: 
   messages:
   - character: Bob
-    message: Oh okay then, bye!
+    message: I'm just fine, thanks!
+  choices:
+  - message: Okay, goodbye!
+    connectingDialogue: {fileID: 11400000, guid: 289a86c94afeec34aa021fb1a710d53c,
+      type: 2}

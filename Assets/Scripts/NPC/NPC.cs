@@ -18,7 +18,7 @@ public class NPC : MonoBehaviour, IInteractable
         
     }
 
-    public void Interact()
+    public void Interact(GameObject interactor)
     {
         if (npcDialogue)
             npcDialogue.SelectNode();

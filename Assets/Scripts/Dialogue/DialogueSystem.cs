@@ -32,20 +32,29 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     public void StartDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
     {
         ClearDialogue();
+        LoadDialogue(messages, choices);
 
-        for (int i = 0; i < messages.Length; i++)
-            dialogueMessages.Enqueue(messages[i]);
-        dialogueChoices.AddRange(choices);
-
-        NextDialogue();
+        ContinueDialogue();
         dialoguePanel.SetActive(true);
         OnDialogueStart?.Invoke();
+    }
+
+    private void LoadDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
+    {
+        if (messages != null)
+        {
+            for (int i = 0; i < messages.Length; i++)
+                dialogueMessages.Enqueue(messages[i]);
+        }
+        if (choices != null)
+            dialogueChoices.AddRange(choices);
+        //TODO: Sort methods
     }
 
     /// <summary>
     /// Plays the next dialogue message from the queue
     /// </summary>
-    public void NextDialogue()
+    public void ContinueDialogue()
     {
         if (dialogueMessages.Count > 0)
         {
@@ -78,7 +87,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             Button newButton = Instantiate(choiceButtonPrefab, buttonsParent);
             newButton.onClick.AddListener(choice.Execute);
             TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
-            buttonText.text = $"\"{choice.Message}\"";
+            buttonText.text = choice.Message;
         }
         dialogueChoices.Clear();
     }
