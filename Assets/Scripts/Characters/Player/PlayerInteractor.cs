@@ -12,6 +12,8 @@ public class PlayerInteractor : MonoBehaviour
     
     void Update()
     {
+        //TODO: Interactable list?
+        //Interact with first interactable when key is pressed down
         if (canInteract && Input.GetKeyDown(interactKey))
         {
             RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxSize / 2, transform.forward);
@@ -28,23 +30,23 @@ public class PlayerInteractor : MonoBehaviour
 
     private void OnEnable()
     {
-        DialogueSystem.OnDialogueStart += OnDialogueStart;
-        DialogueSystem.OnDialogueEnd += OnDialogueEnd;
+        DialogueSystem.OnDialogueStart += DisableInteracting;
+        DialogueSystem.OnDialogueEnd += EnableInteracting;
     }
 
     private void OnDisable()
     {
-        DialogueSystem.OnDialogueStart -= OnDialogueStart;
-        DialogueSystem.OnDialogueEnd -= OnDialogueEnd;
+        DialogueSystem.OnDialogueStart -= DisableInteracting;
+        DialogueSystem.OnDialogueEnd -= EnableInteracting;
     }
 
-    private void OnDialogueStart()
-    {
-        canInteract = false;
-    }
-
-    private void OnDialogueEnd()
+    private void EnableInteracting()
     {
         canInteract = true;
+    }
+
+    private void DisableInteracting()
+    {
+        canInteract = false;
     }
 }

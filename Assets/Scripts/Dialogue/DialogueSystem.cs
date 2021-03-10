@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// The class to take care of the dialogue UI.
+/// Class that takes care of dialogue UI.
 /// </summary>
 public class DialogueSystem : MonoSingleton<DialogueSystem>
 {
@@ -31,24 +31,11 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     /// </summary>
     public void StartDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
     {
-        ClearDialogue();
+        ResetUIElements();
         LoadDialogue(messages, choices);
-
         ContinueDialogue();
         dialoguePanel.SetActive(true);
         OnDialogueStart?.Invoke();
-    }
-
-    private void LoadDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
-    {
-        if (messages != null)
-        {
-            for (int i = 0; i < messages.Length; i++)
-                dialogueMessages.Enqueue(messages[i]);
-        }
-        if (choices != null)
-            dialogueChoices.AddRange(choices);
-        //TODO: Sort methods
     }
 
     /// <summary>
@@ -58,7 +45,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     {
         if (dialogueMessages.Count > 0)
         {
-            ClearDialogue();
+            ResetUIElements();
 
             DialogueMessage dialogue = dialogueMessages.Dequeue();
             characterNameBox.text = dialogue.character;
@@ -72,7 +59,29 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             // Load the buttons if it was the last dialogue message
             if (dialogueMessages.Count == 0)
                 OnPrintCompleted += CreateButtons;
-        }  
+        }
+    }
+
+    /// <summary>
+    /// Loads in the last couple messages and closes the dialogue window when they are done
+    /// </summary>
+    public void EndDialogue(DialogueMessage[] messages)
+    {
+        LoadDialogue(messages, null);
+        OnDialogueEnd?.Invoke();
+    }
+
+    private void LoadDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
+    {
+        dialogueMessages.Clear();
+        dialogueChoices.Clear();
+        if (messages != null)
+        {
+            for (int i = 0; i < messages.Length; i++)
+                dialogueMessages.Enqueue(messages[i]);
+        }
+        if (choices != null)
+            dialogueChoices.AddRange(choices);
     }
 
     /// <summary>
@@ -85,7 +94,7 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
         {
             DialogueChoice choice = dialogueChoices[i];
             Button newButton = Instantiate(choiceButtonPrefab, buttonsParent);
-            newButton.onClick.AddListener(choice.Execute);
+            newButton.onClick.AddListener(choice.SelectChoice);
             TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonText.text = choice.Message;
         }
@@ -93,28 +102,9 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     }
 
     /// <summary>
-    /// Loads in the last couple messages and closes the dialogue window when they are done
-    /// </summary>
-    public void EndDialogue(DialogueMessage[] messages)
-    {
-        dialogueMessages.Clear();
-        for (int i = 0; i < messages.Length; i++)
-            dialogueMessages.Enqueue(messages[i]);
-        OnDialogueEnd?.Invoke();
-    }
-
-    /// <summary>
-    /// Close the dialogue window
-    /// </summary>
-    private void CloseDialogue()
-    { 
-        dialoguePanel.SetActive(false);
-    }
-
-    /// <summary>
     /// Resets all UI elements
     /// </summary>
-    private void ClearDialogue()
+    private void ResetUIElements()
     {
         characterNameBox.text = "";
         messageBox.text = "";
@@ -143,5 +133,10 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     private void OnDisable()
     {
         OnDialogueEnd -= CloseDialogue;
+    }
+
+    private void CloseDialogue()
+    {
+        dialoguePanel.SetActive(false);
     }
 }

@@ -11,7 +11,8 @@ public static class SaveManager
     static Dictionary<string, object> saveData = new Dictionary<string, object>();
 
     public static Action OnCaptureState;
-    public static Action OnSavefileLoaded;
+    public static Action OnGameSaved;
+    public static Action OnGameLoaded;
 
     public static void CaptureState(string id, object data)
     {
@@ -27,17 +28,20 @@ public static class SaveManager
         return data != null;
     }
 
-    public static string GetSaveLocation()
+    private static string GetSaveLocation()
     {
         return Path.Combine(Application.persistentDataPath, SAVEFILENAME);
     }
 
     public static void SaveGame()
     {
+        OnCaptureState?.Invoke();
+
         using (FileStream stream = File.Open(GetSaveLocation(), FileMode.OpenOrCreate))
         {
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, saveData);
+            OnGameSaved?.Invoke();
         }
     }
 
@@ -51,7 +55,7 @@ public static class SaveManager
                 BinaryFormatter formatter = new BinaryFormatter();
                 saveData = (Dictionary<string, object>)formatter.Deserialize(stream);
             }
-            OnSavefileLoaded?.Invoke();
+            OnGameLoaded?.Invoke();
             return true;
         }
         return false;

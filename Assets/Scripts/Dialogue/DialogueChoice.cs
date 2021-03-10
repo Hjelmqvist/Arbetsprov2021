@@ -8,7 +8,7 @@ public class DialogueChoice
 
     public string Message { get { return message; } }
 
-    public void Execute()
+    public void SelectChoice()
     {
         if (connectingDialogue)
             connectingDialogue.SelectNode();

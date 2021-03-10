@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,15 +9,18 @@ public class Consumable : Item
 
     public override void Use(GameObject user)
     {
-        if (user.TryGetComponent(out PlayerStats stats) && TryGetInformation(out ConsumableSO information))
+        if (TryGetInformation(out ConsumableSO information))
         {
-            foreach (ConsumableEffect effect in information.Effects)
+            foreach (ConsumableEffect ce in information.Effects)
             {
-                switch (effect.Effect)
+                switch (ce.Effect)
                 {
                     case ConsumableEffect.EffectType.Strength:
-                        break;
                     case ConsumableEffect.EffectType.Intelligence:
+                        //if (user.TryGetComponent(out PlayerStats stats))
+                        //{
+                        //    stats.ModifyStat(ce.Effect, ce.Value);
+                        //}
                         break;
                     default:
                         Debug.Log("Invalid ConsumableEffect.", information);

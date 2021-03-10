@@ -18,13 +18,13 @@ public class SavableEntity : MonoBehaviour
     private void OnEnable()
     {
         SaveManager.OnCaptureState += OnCaptureState;
-        SaveManager.OnSavefileLoaded += OnRestoreState;
+        SaveManager.OnGameLoaded += OnRestoreState;
     }
 
     private void OnDisable()
     {
         SaveManager.OnCaptureState -= OnCaptureState;
-        SaveManager.OnSavefileLoaded -= OnRestoreState;
+        SaveManager.OnGameLoaded -= OnRestoreState;
     }
 
     private void OnCaptureState()

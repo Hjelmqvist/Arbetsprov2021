@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
     CharacterController controller = null;
     bool canMove = true;
 
-    private void Start()
+    void Awake()
     {
         controller = GetComponent<CharacterController>();
     }
@@ -20,11 +20,12 @@ public class PlayerMovement : MonoBehaviour, ISavable
             controller.Move(moveDir * movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.LookRotation(moveDir);
         }
+        //Always apply gravity on player character
         controller.Move(Physics.gravity * Time.deltaTime);
     }
 
     /// <summary>
-    /// Returns the direction where the player character should be moving
+    /// Returns the normalized vector for the player character to move
     /// </summary>
     bool TryGetMoveDirection(out Vector3 move)
     {
@@ -51,24 +52,24 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
     private void OnEnable()
     {
-        DialogueSystem.OnDialogueStart += OnDialogueStart;
-        DialogueSystem.OnDialogueEnd += OnDialogueEnd;
+        DialogueSystem.OnDialogueStart += DisableMovement;
+        DialogueSystem.OnDialogueEnd += EnableMovement;
     }
 
     private void OnDisable()
     {
-        DialogueSystem.OnDialogueStart -= OnDialogueStart;
-        DialogueSystem.OnDialogueEnd -= OnDialogueEnd;
+        DialogueSystem.OnDialogueStart -= DisableMovement;
+        DialogueSystem.OnDialogueEnd -= EnableMovement;
     }
 
-    private void OnDialogueStart()
-    {
-        canMove = false;
-    }
-
-    private void OnDialogueEnd()
+    private void EnableMovement()
     {
         canMove = true;
+    }
+
+    private void DisableMovement()
+    {
+        canMove = false;
     }
 
     public object CaptureState()
