@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum StatType { Strength, Intelligence }
+
 [System.Serializable]
 public class Stats : IStats
 {
@@ -25,5 +27,16 @@ public class Stats : IStats
             };
         }
         return stats.TryGetValue(stat, out int value) ? value : 0;
+    }
+
+    public bool TryModifyStat(StatType stat, int value)
+    {
+        if (stats.TryGetValue(stat, out int value2))
+        {
+            value2 += value;
+            stats[stat] = value2;
+            return true;
+        }
+        return false;
     }
 }

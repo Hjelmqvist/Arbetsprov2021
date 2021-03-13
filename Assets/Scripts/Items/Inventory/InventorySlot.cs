@@ -13,8 +13,14 @@ public class InventorySlot
         this.item = item;
     }
 
-    public void RemoveItem()
+    public Item TakeItem()
     {
-        item = null;
+        if (item != null)
+        {
+            Item i = item;
+            item = null;
+            return i;
+        }
+        return null;
     }
 }
