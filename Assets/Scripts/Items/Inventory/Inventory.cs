@@ -3,10 +3,10 @@
 [System.Serializable]
 public class Inventory
 {
-    [SerializeField] int slotCount = 32;
-    InventorySlot[] slots = null;
+    [SerializeField] InventorySlot[] slots = null;
 
-    public int SlotCount => slotCount;
+    public int SlotCount => slots.Length;
+    public InventorySlot[] Slots => slots;
 
     public bool TryGetItem(int slot, out Item item)
     {

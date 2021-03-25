@@ -3,24 +3,24 @@
 [System.Serializable]
 public class InventorySlot
 {
-    [SerializeField] Item item = null;
+    public delegate void ItemChanged(Item item);
+    public event ItemChanged OnItemChanged;
 
-    public Item Item => item;
+    [SerializeField] Item currentItem = null;
+    bool hasItem = false;
+
+    public Item Item => currentItem;
 
     public void SetItem(Item item)
     {
         // item.Remove();
-        this.item = item;
+        currentItem = item;
+        hasItem = item != null;
     }
 
-    public Item TakeItem()
+    public bool TryTakeItem(out Item item)
     {
-        if (item != null)
-        {
-            Item i = item;
-            item = null;
-            return i;
-        }
-        return null;
+        item = currentItem;
+        return item != null;
     }
 }

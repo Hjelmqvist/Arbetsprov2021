@@ -7,11 +7,13 @@
 public class Item
 {
     [SerializeField] string displayName = "";
+    [SerializeField] int amount = 1;
 
     // Do not try to save the ScriptableObject to file
     [System.NonSerialized] ItemSO itemSO = null;
 
     public virtual string DisplayName => displayName;
+    public int Amount => amount;
 
     public bool TryGetInformation<T>(out T information) where T : ItemSO
     {

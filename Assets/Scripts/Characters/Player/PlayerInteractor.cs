@@ -5,7 +5,7 @@
 /// </summary>
 public class PlayerInteractor : MonoBehaviour
 {
-    [SerializeField] KeyCode interactKey = default;
+    [SerializeField] string interactButton = "Interact";
     [SerializeField] Vector3 boxSize = Vector3.one;
 
     bool canInteract = true;
@@ -14,7 +14,7 @@ public class PlayerInteractor : MonoBehaviour
     {
         //TODO: Interactable list?
         //Interact with first interactable when key is pressed down
-        if (canInteract && Input.GetKeyDown(interactKey))
+        if (canInteract && Input.GetButtonDown(interactButton))
         {
             RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxSize / 2, transform.forward);
             for (int i = 0; i < hits.Length; i++)

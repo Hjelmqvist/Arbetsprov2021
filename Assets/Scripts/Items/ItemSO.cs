@@ -10,15 +10,15 @@ public class ItemSO : ScriptableObject
     [SerializeField] string itemName = null;
     [SerializeField, TextArea(1, 3)] string description = null;
     [SerializeField] Sprite icon = null;
-    [SerializeField] int stackSize = 1;
+    [SerializeField] int maxStack = 1;
 
     public string ItemName => itemName;
     public string Description => description;
     public Sprite Icon => icon;
-    public bool IsStackable(out int stackSize)
+    public bool IsStackable(out int maxStack)
     {
-        stackSize = this.stackSize;
-        return stackSize > 1;
+        maxStack = this.maxStack;
+        return maxStack > 1;
     }
 
     static Dictionary<string, ItemSO> itemDatabase = null;

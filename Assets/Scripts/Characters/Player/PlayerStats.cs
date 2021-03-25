@@ -8,6 +8,14 @@ public class PlayerStats : MonoBehaviour, IStats, ISavable
     //Stats that are added from leveling up, using items etc.
     [SerializeField] Stats stats = null;
 
+    public delegate void StatsLoaded(PlayerStats stats);
+    public static event StatsLoaded OnStatsLoaded;
+
+    void Start()
+    {
+        OnStatsLoaded?.Invoke(this);
+    }
+
     public int GetStatValue(StatType stat)
     {
         return characterBase.GetStatValue(stat) + stats.GetStatValue(stat);
@@ -29,6 +37,7 @@ public class PlayerStats : MonoBehaviour, IStats, ISavable
         {
             characterBase = CharacterBase.TryGetCharacterBase(save.character, out CharacterBase character) ? character : null;
             stats = save.stats;
+            OnStatsLoaded?.Invoke(this);
         }
     }
 }
