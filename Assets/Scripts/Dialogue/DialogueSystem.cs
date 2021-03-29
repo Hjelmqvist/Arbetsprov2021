@@ -8,7 +8,7 @@ using TMPro;
 /// <summary>
 /// Class that takes care of dialogue UI.
 /// </summary>
-public class DialogueSystem : MonoSingleton<DialogueSystem>
+public class DialogueSystem : MonoBehaviour
 {
     [SerializeField] GameObject dialoguePanel = null;
     [SerializeField] TextMeshProUGUI characterNameBox = null;
@@ -26,16 +26,40 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
     public static Action OnDialogueEnd = null;
     Action OnPrintCompleted = null;
 
-    /// <summary>
-    /// Setup and play dialogue
-    /// </summary>
-    public void StartDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
+    private void OnEnable()
+    {
+        Dialogue.OnDialogueStart += Dialogue_OnDialogueStart;
+        DialogueEnd.OnDialogueEnd += DialogueEnd_OnDialogueEnd;
+        OnDialogueEnd += CloseDialogue;
+        
+    }
+
+    private void OnDisable()
+    {
+        Dialogue.OnDialogueStart -= Dialogue_OnDialogueStart;
+        DialogueEnd.OnDialogueEnd -= DialogueEnd_OnDialogueEnd;
+        OnDialogueEnd -= CloseDialogue;
+        
+    }
+
+    private void Dialogue_OnDialogueStart(DialogueMessage[] messages, DialogueChoice[] choices)
     {
         ResetUIElements();
         LoadDialogue(messages, choices);
         ContinueDialogue();
         dialoguePanel.SetActive(true);
         OnDialogueStart?.Invoke();
+    }
+
+    private void DialogueEnd_OnDialogueEnd(DialogueMessage[] messages)
+    {
+        LoadDialogue(messages, null);
+        OnDialogueEnd?.Invoke();
+    }
+
+    private void CloseDialogue()
+    {
+        dialoguePanel.SetActive(false);
     }
 
     /// <summary>
@@ -60,15 +84,6 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             if (dialogueMessages.Count == 0)
                 OnPrintCompleted += CreateButtons;
         }
-    }
-
-    /// <summary>
-    /// Loads in the last couple messages and closes the dialogue window when they are done
-    /// </summary>
-    public void EndDialogue(DialogueMessage[] messages)
-    {
-        LoadDialogue(messages, null);
-        OnDialogueEnd?.Invoke();
     }
 
     private void LoadDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
@@ -123,20 +138,5 @@ public class DialogueSystem : MonoSingleton<DialogueSystem>
             yield return new WaitForSeconds(printSpeed);
         }
         OnPrintCompleted?.Invoke();
-    }
-
-    private void OnEnable()
-    {
-        OnDialogueEnd += CloseDialogue;
-    }
-
-    private void OnDisable()
-    {
-        OnDialogueEnd -= CloseDialogue;
-    }
-
-    private void CloseDialogue()
-    {
-        dialoguePanel.SetActive(false);
     }
 }

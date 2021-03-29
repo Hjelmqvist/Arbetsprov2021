@@ -6,8 +6,11 @@ public class Dialogue : DialogueNode
     [SerializeField] DialogueMessage[] messages = null;
     [SerializeField] DialogueChoice[] choices = null;
 
+    public delegate void DialogueStart(DialogueMessage[] messages, DialogueChoice[] choices);
+    public static event DialogueStart OnDialogueStart;
+
     public override void SelectNode()
     {
-        DialogueSystem.Instance.StartDialogue(messages, choices);
+        OnDialogueStart?.Invoke(messages, choices);
     }
 }
