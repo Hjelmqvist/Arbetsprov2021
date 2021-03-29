@@ -44,10 +44,9 @@ public class DialogueSystem : MonoBehaviour
 
     private void Dialogue_OnDialogueStart(DialogueMessage[] messages, DialogueChoice[] choices)
     {
-        ResetUIElements();
+        ResetUI();
         LoadDialogue(messages, choices);
         ContinueDialogue();
-        dialoguePanel.SetActive(true);
         OnDialogueStart?.Invoke();
     }
 
@@ -69,7 +68,8 @@ public class DialogueSystem : MonoBehaviour
     {
         if (dialogueMessages.Count > 0)
         {
-            ResetUIElements();
+            ResetUI();
+            dialoguePanel.SetActive(true);
 
             DialogueMessage dialogue = dialogueMessages.Dequeue();
             characterNameBox.text = dialogue.character;
@@ -119,7 +119,7 @@ public class DialogueSystem : MonoBehaviour
     /// <summary>
     /// Resets all UI elements
     /// </summary>
-    private void ResetUIElements()
+    private void ResetUI()
     {
         characterNameBox.text = "";
         messageBox.text = "";
