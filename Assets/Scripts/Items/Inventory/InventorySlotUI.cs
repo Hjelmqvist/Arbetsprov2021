@@ -7,14 +7,21 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 {
     [SerializeField] Button button = null;
     [SerializeField] TextMeshProUGUI amountText = null;
-    [SerializeField] Sprite defaultImage = null;
+    [SerializeField] Image itemImage = null;
 
     InventorySlot slot = null;
-    Item item = null;
-    ItemSO information = null;
 
-    static InventorySlotUI fromSlot = null;
-    static InventorySlotUI toSlot = null;
+    static InventorySlot fromSlot = null;
+    static InventorySlot toSlot = null;
+
+    public delegate void DragItemStart(Item item);
+    public static event DragItemStart OnBeginDragItem;
+
+    public delegate void DragItem(Vector2 pos);
+    public static event DragItem OnDragItem;
+
+    public delegate void DragItemEnd();
+    public static event DragItemEnd OnDragItemEnd;
 
     public void SetInventorySlot(InventorySlot newSlot)
     {
@@ -31,46 +38,66 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void ItemChanged(Item newItem)
     {
-        item = newItem;
-        information = null;
-
-        if (newItem != null)
+        if (newItem == null || string.IsNullOrEmpty(newItem.ItemName))
         {
-            button.image.sprite = defaultImage;
             amountText.gameObject.SetActive(false);
+            itemImage.enabled = false;
         }
         else if (newItem.TryGetInformation(out ItemSO info))
         {
-            information = info;
-            button.image.sprite = info.Icon;
             amountText.text = newItem.Amount.ToString();
-            amountText.gameObject.SetActive(info.IsStackable(out _));
+            amountText.gameObject.SetActive(info.IsStackable());
+            itemImage.enabled = true;
+            itemImage.sprite = info.Icon;
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Begin drag");
+        if (slot.HasItem)
+        {
+            fromSlot = slot;
+            OnBeginDragItem?.Invoke(slot.Item);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("Is dragging");
+        OnDragItem?.Invoke(Input.mousePosition);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("End drag");
+        OnDragItemEnd?.Invoke();
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Drop");
+        if (fromSlot.Item.ItemName == toSlot.Item.ItemName &&
+                fromSlot.Item.TryGetInformation(out ItemSO info) && info.IsStackable())
+        {
+            //Stack items
+            int overflow = toSlot.Item.ModifyAmount(fromSlot.Item.Amount);
+            fromSlot.Item.ModifyAmount(overflow - fromSlot.Item.Amount);
+
+            //To update UI elements
+            fromSlot.SetItem(fromSlot.Item);
+            toSlot.SetItem(toSlot.Item);
+            if (fromSlot.Item.Amount <= 0)
+                fromSlot.SetItem(null);
+        }
+        else
+        {
+            Item temp = toSlot.Item;
+            toSlot.SetItem(fromSlot.Item);
+            fromSlot.SetItem(temp);
+        }
+        OnDragItemEnd?.Invoke();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        toSlot = this;
+        toSlot = slot;
     }
 
     public void OnPointerExit(PointerEventData eventData)

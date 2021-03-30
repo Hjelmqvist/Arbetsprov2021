@@ -15,11 +15,11 @@ public class ItemSO : ScriptableObject
     public string ItemName => itemName;
     public string Description => description;
     public Sprite Icon => icon;
-    public bool IsStackable(out int maxStack)
+    public bool IsStackable()
     {
-        maxStack = this.maxStack;
         return maxStack > 1;
     }
+    public int MaxStack => maxStack;
 
     static Dictionary<string, ItemSO> itemDatabase = null;
 

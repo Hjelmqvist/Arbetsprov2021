@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
-    public SpecialList list = null;
-    public CharacterBase charBase = null;
+    public PlayerInventory inventory;
 
     void Update()
     {
@@ -16,11 +15,10 @@ public class Testing : MonoBehaviour
         {
             SaveManager.LoadGame();
         }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+           
+        }
     }
-}
-
-[System.Serializable]
-public class SpecialList : List<string>
-{
-
 }

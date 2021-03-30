@@ -7,20 +7,13 @@ public class InventorySlot
     public event ItemChanged OnItemChanged;
 
     [SerializeField] Item currentItem = null;
-    bool hasItem = false;
+    public bool HasItem => currentItem != null && !string.IsNullOrEmpty(currentItem.ItemName);
 
     public Item Item => currentItem;
 
     public void SetItem(Item item)
     {
-        // item.Remove();
         currentItem = item;
-        hasItem = item != null;
-    }
-
-    public bool TryTakeItem(out Item item)
-    {
-        item = currentItem;
-        return item != null;
+        OnItemChanged?.Invoke(item);
     }
 }

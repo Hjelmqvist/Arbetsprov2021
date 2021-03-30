@@ -12,6 +12,11 @@ public class PlayerInventory : MonoBehaviour, ISavable
         OnInventoryLoaded?.Invoke(inventory.Slots);
     }
 
+    public bool TryAddItem(Item item)
+    {
+        return inventory.TryAddItem(item);
+    }
+
     public bool TryGetItem(int slot, out Item item)
     {
         inventory.TryGetItem(slot, out Item foundItem);
