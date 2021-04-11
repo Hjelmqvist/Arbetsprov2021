@@ -73,8 +73,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (fromSlot.Item.ItemName == toSlot.Item.ItemName &&
-                fromSlot.Item.TryGetInformation(out ItemSO info) && info.IsStackable())
+        if (fromSlot.Item.IsSameType(toSlot.Item) && fromSlot.Item.TryGetInformation(out ItemSO info) && info.IsStackable())
         {
             //Stack items
             int overflow = toSlot.Item.ModifyAmount(fromSlot.Item.Amount);

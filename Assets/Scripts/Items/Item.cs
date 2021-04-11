@@ -53,4 +53,14 @@ public class Item
     {
         Debug.Log(itemName + " was used.");
     }
+
+    public bool IsSameType(Item other)
+    {
+        return other != null && itemName == other.itemName;
+    }
+
+    public bool IsSameType(ItemSO other)
+    {
+        return other != null && ItemName == other.ItemName;
+    }
 }

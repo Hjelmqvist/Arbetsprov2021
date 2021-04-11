@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class Inventory
@@ -16,7 +18,7 @@ public class Inventory
             {
                 if (slots[i].HasItem)
                 {
-                    if (slots[i].Item.ItemName == item.ItemName && info.IsStackable())
+                    if (slots[i].Item.IsSameType(item) && info.IsStackable())
                     {
                         //Stack items
                         int overflow = slots[i].Item.ModifyAmount(item.Amount);
@@ -41,5 +43,55 @@ public class Inventory
         if (slot >= 0 && slot < slots.Length)
             item = slots[slot].Item;
         return item != null;
+    }
+
+    public bool TryTakeItems(ItemLookup[] lookups)
+    {
+        if (ContainsItems(lookups, out Dictionary<string, InventorySlot[]> slotsWithSpecifiedItems))
+        {
+            for (int i = 0; i < lookups.Length; i++)
+            {
+                int amountToTake = lookups[i].quantity;
+                foreach (InventorySlot slot in slotsWithSpecifiedItems[lookups[i].item.ItemName])
+                {
+                    int taken = slot.Item.Amount;
+                    amountToTake -= taken;
+
+                    //Return x amount if we got more than enough.
+                    if (amountToTake < 0)
+                    {
+                        slot.Item.ModifyAmount((-amountToTake) - slot.Item.Amount);
+                        slot.SetItem(slot.Item);
+                        break;
+                    }    
+                    else
+                    {
+                        slot.Item.ModifyAmount(-taken);
+                        slot.SetItem(null);
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public bool ContainsItems(ItemLookup[] lookups, out Dictionary<string, InventorySlot[]> slotsWithSpecifiedItems)
+    {
+        Dictionary<string, InventorySlot[]> foundSlots = new Dictionary<string, InventorySlot[]>();
+
+        foreach (ItemLookup lookup in lookups)
+        {
+            InventorySlot[] slotsWithItems = slots.Where(x => x.Item != null && x.Item.IsSameType(lookup.item)).ToArray();
+            int totalAmount = slotsWithItems.Sum(x => x.Item.Amount);
+            if (totalAmount < lookup.quantity)
+            {
+                slotsWithSpecifiedItems = null;
+                return false;
+            }
+            foundSlots.Add(lookup.item.ItemName, slotsWithItems);
+        }
+        slotsWithSpecifiedItems = foundSlots;
+        return true;
     }
 }

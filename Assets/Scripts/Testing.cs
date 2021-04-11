@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
+    [SerializeField] ItemLookup[] lookups;
     public PlayerInventory inventory;
 
     void Update()
@@ -18,7 +19,7 @@ public class Testing : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-           
+            Debug.Log(inventory.TryTakeItems(lookups));
         }
     }
 }

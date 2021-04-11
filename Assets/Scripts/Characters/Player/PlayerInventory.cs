@@ -24,6 +24,16 @@ public class PlayerInventory : MonoBehaviour, ISavable
         return item != null;
     }
 
+    public bool TryTakeItems(ItemLookup[] lookups)
+    {
+        return inventory.TryTakeItems(lookups);
+    }
+
+    public bool ContainsItems(ItemLookup[] lookups)
+    {
+        return inventory.ContainsItems(lookups, out _);
+    }
+
     public object CaptureState()
     {
         return inventory;
