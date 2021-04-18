@@ -27,7 +27,6 @@ public class DialogueSystem : MonoBehaviour
     Action OnPrintCompleted = null;
 
     GameObject currentUser = null;
-    bool endDialogue = false;
 
     private void OnEnable()
     {
@@ -46,7 +45,6 @@ public class DialogueSystem : MonoBehaviour
     private void Dialogue_OnDialogueStart(DialogueMessage[] messages, DialogueChoice[] choices, GameObject user)
     {
         currentUser = user;
-        endDialogue = false;
         ResetUI();
         LoadDialogue(messages, choices);
         ContinueDialogue();
@@ -55,7 +53,6 @@ public class DialogueSystem : MonoBehaviour
 
     private void DialogueEnd_OnDialogueEnd(DialogueMessage[] messages, GameObject user)
     {
-        endDialogue = true;
         LoadDialogue(messages, null);
         ContinueDialogue();
     }
@@ -88,7 +85,7 @@ public class DialogueSystem : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(PrintMessage(dialogue.message));
         }
-        else if (endDialogue)
+        else if (dialogueChoices.Count == 0)
             OnDialogueEnd?.Invoke();
     }
 

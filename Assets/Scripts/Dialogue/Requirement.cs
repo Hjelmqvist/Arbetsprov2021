@@ -3,7 +3,10 @@
 [System.Serializable]
 public class Requirement
 {
+    [Tooltip("Items that has to be in the inventory, wont be taken")]
     [SerializeField] ItemLookup[] itemsInInventory = null;
+
+    [Tooltip("Items that will be taken from inventory")]
     [SerializeField] ItemLookup[] itemsToTake = null;
 
     /// <summary>
