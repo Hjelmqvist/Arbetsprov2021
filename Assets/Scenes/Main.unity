@@ -1024,10 +1024,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e2803bd6b537f48bf20105e5cb207b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookups:
-  - item: {fileID: 11400000, guid: f185590487900c84eb53ad60b3bfcb95, type: 2}
-    quantity: 7
-  inventory: {fileID: 1363144390}
+  req:
+    itemsInInventory:
+    - item: {fileID: 11400000, guid: 5fbd208c01e4fb44eb1f230b9b32d778, type: 2}
+      quantity: 2
+    itemsToTake:
+    - item: {fileID: 11400000, guid: f185590487900c84eb53ad60b3bfcb95, type: 2}
+      quantity: 15
+  player: {fileID: 1363144387}
 --- !u!114 &1363144389
 MonoBehaviour:
   m_ObjectHideFlags: 0

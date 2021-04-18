@@ -26,12 +26,14 @@ public class DialogueSystem : MonoBehaviour
     public static Action OnDialogueEnd = null;
     Action OnPrintCompleted = null;
 
+    GameObject currentUser = null;
+    bool endDialogue = false;
+
     private void OnEnable()
     {
         Dialogue.OnDialogueStart += Dialogue_OnDialogueStart;
         DialogueEnd.OnDialogueEnd += DialogueEnd_OnDialogueEnd;
         OnDialogueEnd += CloseDialogue;
-        
     }
 
     private void OnDisable()
@@ -39,21 +41,23 @@ public class DialogueSystem : MonoBehaviour
         Dialogue.OnDialogueStart -= Dialogue_OnDialogueStart;
         DialogueEnd.OnDialogueEnd -= DialogueEnd_OnDialogueEnd;
         OnDialogueEnd -= CloseDialogue;
-        
     }
 
-    private void Dialogue_OnDialogueStart(DialogueMessage[] messages, DialogueChoice[] choices)
+    private void Dialogue_OnDialogueStart(DialogueMessage[] messages, DialogueChoice[] choices, GameObject user)
     {
+        currentUser = user;
+        endDialogue = false;
         ResetUI();
         LoadDialogue(messages, choices);
         ContinueDialogue();
         OnDialogueStart?.Invoke();
     }
 
-    private void DialogueEnd_OnDialogueEnd(DialogueMessage[] messages)
+    private void DialogueEnd_OnDialogueEnd(DialogueMessage[] messages, GameObject user)
     {
+        endDialogue = true;
         LoadDialogue(messages, null);
-        OnDialogueEnd?.Invoke();
+        ContinueDialogue();
     }
 
     private void CloseDialogue()
@@ -74,16 +78,18 @@ public class DialogueSystem : MonoBehaviour
             DialogueMessage dialogue = dialogueMessages.Dequeue();
             characterNameBox.text = dialogue.character;
 
-            // Only one print coroutine at a time
-            StopAllCoroutines();
-            StartCoroutine(PrintMessage(dialogue.message));
-
-            nextButton.gameObject.SetActive(dialogueMessages.Count > 0);
-
             // Load the buttons if it was the last dialogue message
             if (dialogueMessages.Count == 0)
                 OnPrintCompleted += CreateButtons;
+
+            nextButton.gameObject.SetActive(dialogueMessages.Count > 0 || dialogueChoices.Count == 0);
+
+            // Only one print coroutine at a time
+            StopAllCoroutines();
+            StartCoroutine(PrintMessage(dialogue.message));
         }
+        else if (endDialogue)
+            OnDialogueEnd?.Invoke();
     }
 
     private void LoadDialogue(DialogueMessage[] messages, DialogueChoice[] choices)
@@ -109,9 +115,16 @@ public class DialogueSystem : MonoBehaviour
         {
             DialogueChoice choice = dialogueChoices[i];
             Button newButton = Instantiate(choiceButtonPrefab, buttonsParent);
-            newButton.onClick.AddListener(choice.SelectChoice);
             TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonText.text = choice.Message;
+
+            if (choice.IsRequirementsFulfilled(currentUser))
+            {
+                Debug.Log("Items fulfilled");
+                newButton.onClick.AddListener(() => choice.SelectChoice(currentUser));
+            }  
+            else
+                newButton.interactable = false;
         }
         dialogueChoices.Clear();
     }

@@ -5,11 +5,11 @@ public class DialogueEnd : DialogueNode
 {
     [SerializeField] DialogueMessage[] messages = null;
 
-    public delegate void DialogueEnded(DialogueMessage[] messages);
+    public delegate void DialogueEnded(DialogueMessage[] messages, GameObject user);
     public static event DialogueEnded OnDialogueEnd;
 
-    public override void SelectNode()
+    public override void SelectNode(GameObject user)
     {
-        OnDialogueEnd?.Invoke(messages);
+        OnDialogueEnd?.Invoke(messages, user);
     }
 }
