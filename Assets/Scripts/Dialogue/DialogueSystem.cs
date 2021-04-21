@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// Class that takes care of dialogue UI.
+/// Takes care of the dialogue window, including choice buttons
 /// </summary>
 public class DialogueSystem : MonoBehaviour
 {
@@ -59,8 +59,9 @@ public class DialogueSystem : MonoBehaviour
         ContinueDialogue();
     }
 
-    private void DialogueChoice_OnChoiceFailed()
+    private void DialogueChoice_OnChoiceFailed(string error)
     {
+        //Just end the dialogue if the choice didnt work for some reason.
         OnDialogueEnd?.Invoke();
     }
 

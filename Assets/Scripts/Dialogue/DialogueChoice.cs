@@ -14,20 +14,22 @@ public class DialogueChoice
     public enum HideType { Hide, NotInteractable }
 
     public string Message { get { return message; } }
+    //TODO: Think of a better name?
     public HideType HowToHide => hideType;
 
-    public static Action OnChoiceFailed;
+    public delegate void ChoiceFailed(string error);
+    public static ChoiceFailed OnChoiceFailed;
 
     public void SelectChoice(GameObject user)
     {
-        if (rewards.CanGiveRewards(user))
+        if (rewards.CanGiveRewards(user, out string error))
         {
             requirements.FulfillRequirements(user);
             rewards.GiveRewards(user);
             connectingDialogue.SelectNode(user);
         }
         else
-            OnChoiceFailed?.Invoke();
+            OnChoiceFailed?.Invoke(error);
     }
 
     public bool CanFulfillRequirements(GameObject user)

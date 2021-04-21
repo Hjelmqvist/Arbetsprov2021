@@ -13,34 +13,16 @@ public class Inventory
 
     /* METHODS FOR GIVING ITEMS */ 
 
-    public bool TryAddItem(Item item)
+    public bool TryGiveItems(ItemInformation[] items)
     {
-        if (item.TryGetInformation(out ItemSO info))
+        if (HasRoom(items, out var foundSlots))
         {
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i].HasItem)
-                {
-                    if (slots[i].Item.IsSameType(item) && info.IsStackable())
-                    {
-                        //Stack items
-                        int overflow = slots[i].Item.ModifyAmount(item.Amount);
-                        item.ModifyAmount(item.Amount - overflow);
-                        if (item.Amount <= 0)
-                            return true;
-                    }
-                }
-                else
-                {
-                    slots[i].SetItem(item);
-                    return true;
-                }
-            }
+
         }
-        return false;
+        return true;
     }
 
-    public bool HasRoom(ItemLookup[] items)
+    public bool HasRoom(ItemInformation[] items, out Dictionary<string, InventorySlot[]> foundSlots)
     {
         //TODO: Check if inventory has enough space. Reverse ContainsItems pretty much
         throw new NotImplementedException();
@@ -48,22 +30,14 @@ public class Inventory
 
     /* METHODS FOR TAKING ITEMS */
 
-    public bool TryGetItem(int slot, out Item item)
+    public bool TryTakeItems(ItemInformation[] lookups)
     {
-        item = null;
-        if (slot >= 0 && slot < slots.Length)
-            item = slots[slot].Item;
-        return item != null;
-    }
-
-    public bool TryTakeItems(ItemLookup[] lookups)
-    {
-        if (ContainsItems(lookups, out Dictionary<string, InventorySlot[]> slotsWithSpecifiedItems))
+        if (ContainsItems(lookups, out var foundSlots))
         {
             for (int i = 0; i < lookups.Length; i++)
             {
                 int amountToTake = lookups[i].amount;
-                foreach (InventorySlot slot in slotsWithSpecifiedItems[lookups[i].item.ItemName])
+                foreach (InventorySlot slot in foundSlots[lookups[i].item.ItemName])
                 {
                     int taken = slot.Item.Amount;
                     amountToTake -= taken;
@@ -87,22 +61,22 @@ public class Inventory
         return false;
     }
 
-    public bool ContainsItems(ItemLookup[] lookups, out Dictionary<string, InventorySlot[]> slotsWithSpecifiedItems)
+    public bool ContainsItems(ItemInformation[] lookups, out Dictionary<string, InventorySlot[]> foundSlots)
     {
-        Dictionary<string, InventorySlot[]> foundSlots = new Dictionary<string, InventorySlot[]>();
+        Dictionary<string, InventorySlot[]> specifiedItemSlots = new Dictionary<string, InventorySlot[]>();
 
-        foreach (ItemLookup lookup in lookups)
+        foreach (ItemInformation lookup in lookups)
         {
             InventorySlot[] slotsWithItems = slots.Where(x => x.Item != null && x.Item.IsSameType(lookup.item)).ToArray();
             int totalAmount = slotsWithItems.Sum(x => x.Item.Amount);
             if (totalAmount < lookup.amount)
             {
-                slotsWithSpecifiedItems = null;
+                foundSlots = null;
                 return false;
             }
-            foundSlots.Add(lookup.item.ItemName, slotsWithItems);
+            specifiedItemSlots.Add(lookup.item.ItemName, slotsWithItems);
         }
-        slotsWithSpecifiedItems = foundSlots;
+        foundSlots = specifiedItemSlots;
         return true;
     }
 }

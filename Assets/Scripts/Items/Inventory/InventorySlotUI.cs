@@ -14,6 +14,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     static InventorySlot fromSlot = null;
     static InventorySlot toSlot = null;
 
+    //TODO: Use one event with enum instead.
     public delegate void DragItemStart(Item item);
     public static event DragItemStart OnBeginDragItem;
 

@@ -4,10 +4,10 @@
 public class Requirement
 {
     [Tooltip("Items that has to be in the inventory, wont be taken")]
-    [SerializeField] ItemLookup[] itemsInInventory = null;
+    [SerializeField] ItemInformation[] itemsInInventory = null;
 
     [Tooltip("Items that will be taken from inventory")]
-    [SerializeField] ItemLookup[] itemsToTake = null;
+    [SerializeField] ItemInformation[] itemsToTake = null;
 
     /// <summary>
     /// Returns true if all requirements can be fulfilled.
