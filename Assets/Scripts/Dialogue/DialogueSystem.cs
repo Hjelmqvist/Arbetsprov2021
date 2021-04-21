@@ -32,6 +32,7 @@ public class DialogueSystem : MonoBehaviour
     {
         Dialogue.OnDialogueStart += Dialogue_OnDialogueStart;
         DialogueEnd.OnDialogueEnd += DialogueEnd_OnDialogueEnd;
+        DialogueChoice.OnChoiceFailed += DialogueChoice_OnChoiceFailed;
         OnDialogueEnd += CloseDialogue;
     }
 
@@ -39,6 +40,7 @@ public class DialogueSystem : MonoBehaviour
     {
         Dialogue.OnDialogueStart -= Dialogue_OnDialogueStart;
         DialogueEnd.OnDialogueEnd -= DialogueEnd_OnDialogueEnd;
+        DialogueChoice.OnChoiceFailed -= DialogueChoice_OnChoiceFailed;
         OnDialogueEnd -= CloseDialogue;
     }
 
@@ -55,6 +57,11 @@ public class DialogueSystem : MonoBehaviour
     {
         LoadDialogue(messages, null);
         ContinueDialogue();
+    }
+
+    private void DialogueChoice_OnChoiceFailed()
+    {
+        OnDialogueEnd?.Invoke();
     }
 
     private void CloseDialogue()
@@ -111,15 +118,16 @@ public class DialogueSystem : MonoBehaviour
         for (int i = dialogueChoices.Count - 1; i >= 0; i--)
         {
             DialogueChoice choice = dialogueChoices[i];
+
+            if (!choice.CanFulfillRequirements(currentUser) && choice.HowToHide == DialogueChoice.HideType.Hide)
+                continue;
+
             Button newButton = Instantiate(choiceButtonPrefab, buttonsParent);
             TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonText.text = choice.Message;
 
-            if (choice.IsRequirementsFulfilled(currentUser))
-            {
-                Debug.Log("Items fulfilled");
+            if (choice.CanFulfillRequirements(currentUser))
                 newButton.onClick.AddListener(() => choice.SelectChoice(currentUser));
-            }  
             else
                 newButton.interactable = false;
         }

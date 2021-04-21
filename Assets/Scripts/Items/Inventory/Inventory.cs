@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 [System.Serializable]
 public class Inventory
@@ -9,6 +10,8 @@ public class Inventory
 
     public int SlotCount => slots.Length;
     public InventorySlot[] Slots => slots;
+
+    /* METHODS FOR GIVING ITEMS */ 
 
     public bool TryAddItem(Item item)
     {
@@ -37,6 +40,14 @@ public class Inventory
         return false;
     }
 
+    public bool HasRoom(ItemLookup[] items)
+    {
+        //TODO: Check if inventory has enough space. Reverse ContainsItems pretty much
+        throw new NotImplementedException();
+    }
+
+    /* METHODS FOR TAKING ITEMS */
+
     public bool TryGetItem(int slot, out Item item)
     {
         item = null;
@@ -51,7 +62,7 @@ public class Inventory
         {
             for (int i = 0; i < lookups.Length; i++)
             {
-                int amountToTake = lookups[i].quantity;
+                int amountToTake = lookups[i].amount;
                 foreach (InventorySlot slot in slotsWithSpecifiedItems[lookups[i].item.ItemName])
                 {
                     int taken = slot.Item.Amount;
@@ -84,7 +95,7 @@ public class Inventory
         {
             InventorySlot[] slotsWithItems = slots.Where(x => x.Item != null && x.Item.IsSameType(lookup.item)).ToArray();
             int totalAmount = slotsWithItems.Sum(x => x.Item.Amount);
-            if (totalAmount < lookup.quantity)
+            if (totalAmount < lookup.amount)
             {
                 slotsWithSpecifiedItems = null;
                 return false;

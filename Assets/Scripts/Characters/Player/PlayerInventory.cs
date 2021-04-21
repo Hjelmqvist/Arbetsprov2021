@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour, ISavable
 {
@@ -12,11 +13,6 @@ public class PlayerInventory : MonoBehaviour, ISavable
         OnInventoryLoaded?.Invoke(inventory.Slots);
     }
 
-    public bool TryAddItem(Item item)
-    {
-        return inventory.TryAddItem(item);
-    }
-
     public bool TryGetItem(int slot, out Item item)
     {
         inventory.TryGetItem(slot, out Item foundItem);
@@ -24,14 +20,19 @@ public class PlayerInventory : MonoBehaviour, ISavable
         return item != null;
     }
 
-    public bool TryTakeItems(ItemLookup[] lookups)
+    public bool HasRoom(ItemLookup[] items)
     {
-        return inventory.TryTakeItems(lookups);
+        return inventory.HasRoom(items);
     }
 
-    public bool ContainsItems(ItemLookup[] lookups)
+    public bool TryTakeItems(ItemLookup[] items)
     {
-        return inventory.ContainsItems(lookups, out _);
+        return inventory.TryTakeItems(items);
+    }
+
+    public bool ContainsItems(ItemLookup[] items)
+    {
+        return inventory.ContainsItems(items, out _);
     }
 
     public object CaptureState()

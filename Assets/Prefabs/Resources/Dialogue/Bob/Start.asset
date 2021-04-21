@@ -21,20 +21,29 @@ MonoBehaviour:
   - message: How are you?
     connectingDialogue: {fileID: 11400000, guid: 927245edee73cb545b7c70b369f96695,
       type: 2}
+    hideType: 1
     requirements:
       itemsInInventory: []
       itemsToTake: []
+    rewards:
+      itemRewards: []
   - message: Goodbye, Bob.
     connectingDialogue: {fileID: 11400000, guid: 289a86c94afeec34aa021fb1a710d53c,
       type: 2}
+    hideType: 1
     requirements:
       itemsInInventory: []
       itemsToTake: []
+    rewards:
+      itemRewards: []
   - message: Give 10x Bananas
     connectingDialogue: {fileID: 11400000, guid: a41fc6cbf810d894a9829f36c4ec03bb,
       type: 2}
+    hideType: 1
     requirements:
       itemsInInventory: []
       itemsToTake:
       - item: {fileID: 11400000, guid: f185590487900c84eb53ad60b3bfcb95, type: 2}
-        quantity: 10
+        amount: 10
+    rewards:
+      itemRewards: []

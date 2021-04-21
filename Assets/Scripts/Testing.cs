@@ -19,7 +19,7 @@ public class Testing : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-            Debug.Log(req.IsFulfilled(player));
+            Debug.Log(req.CanFulfillRequirements(player));
         }
     }
 }

@@ -12,12 +12,12 @@ public class Requirement
     /// <summary>
     /// Returns true if all requirements can be fulfilled.
     /// </summary>
-    public bool IsFulfilled(GameObject user)
+    public bool CanFulfillRequirements(GameObject player)
     {
         //Look for items
         if (itemsInInventory.Length > 0 || itemsToTake.Length > 0)
         {
-            if (!user.TryGetComponent(out PlayerInventory inventory) || 
+            if (!player.TryGetComponent(out PlayerInventory inventory) || 
                 !inventory.ContainsItems(itemsInInventory) ||
                 !inventory.ContainsItems(itemsToTake)) 
             {
@@ -30,13 +30,9 @@ public class Requirement
     /// <summary>
     /// Take necessary items etc.
     /// </summary>
-    public bool FulfillRequirements(GameObject user)
+    public void FulfillRequirements(GameObject player)
     {
-        if (itemsToTake.Length > 0 && user.TryGetComponent(out PlayerInventory inventory))
-        {
-            if (!inventory.TryTakeItems(itemsToTake))
-                return false;
-        }
-        return true;
+        if (itemsToTake.Length > 0 && player.TryGetComponent(out PlayerInventory inventory))
+            inventory.TryTakeItems(itemsToTake);
     }
 }
