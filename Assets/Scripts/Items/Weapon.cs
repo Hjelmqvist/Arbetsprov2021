@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public class Weapon : Item
 {
-    public Weapon(string name) : base(name) { }
+    public Weapon(string name, int amount) : base(name, amount) { }
 }

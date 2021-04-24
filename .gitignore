@@ -10,6 +10,7 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 /[Aa]ssets/polyperfect/
+/[Aa]ssets/2D Pixel Item Pack/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta

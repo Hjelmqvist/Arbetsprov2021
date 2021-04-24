@@ -10,6 +10,16 @@ public class ConsumableEffect
 
     public void Use(GameObject user)
     {
-
+        switch (effect)
+        {
+            case EffectType.Strength:
+            case EffectType.Intelligence:
+                if (user.TryGetComponent(out PlayerStats stats))
+                    stats.TryModifyStat((StatType)effect, value);
+                break;
+            default:
+                break;
+        }
+        
     }
 }

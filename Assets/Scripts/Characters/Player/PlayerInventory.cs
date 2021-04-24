@@ -13,11 +13,7 @@ public class PlayerInventory : MonoBehaviour, ISavable
     }
 
     public bool TryGiveItems(ItemInformation[] items) => inventory.TryGiveItems(items);
-
-    public bool HasRoom(ItemInformation[] items) => inventory.HasRoom(items, out _);
-
     public bool TryTakeItems(ItemInformation[] items) => inventory.TryTakeItems(items);
-
     public bool ContainsItems(ItemInformation[] items) => inventory.ContainsItems(items, out _);
     public object CaptureState()
     {

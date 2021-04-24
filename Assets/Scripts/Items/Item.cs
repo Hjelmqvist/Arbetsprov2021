@@ -16,9 +16,10 @@ public class Item
     public int Amount => amount;
 
 
-    public Item(string name)
+    public Item(string name, int amount)
     {
         itemName = name;
+        this.amount = amount;
     }
 
     /// <summary>
@@ -26,7 +27,7 @@ public class Item
     /// </summary>
     public int ModifyAmount(int amount)
     {
-        if (TryGetInformation(out ItemSO info) && info.IsStackable())
+        if (TryGetInformation(out ItemSO info) && info.IsStackable)
         {
             this.amount += amount;
             int overflow = this.amount - info.MaxStack;

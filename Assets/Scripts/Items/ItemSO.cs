@@ -15,10 +15,7 @@ public class ItemSO : ScriptableObject
     public string ItemName => itemName;
     public string Description => description;
     public Sprite Icon => icon;
-    public bool IsStackable()
-    {
-        return maxStack > 1;
-    }
+    public bool IsStackable => maxStack > 1;
     public int MaxStack => maxStack;
 
     static Dictionary<string, ItemSO> itemDatabase = null;
@@ -39,8 +36,8 @@ public class ItemSO : ScriptableObject
         return foundItem != null;
     }
 
-    public virtual Item GetItemInstance()
+    public virtual Item GetItemInstance(int amount = 1)
     {
-        return new Item(itemName);
+        return new Item(itemName, amount);
     }
 }

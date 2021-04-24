@@ -8,8 +8,13 @@ public class PlayerStats : MonoBehaviour, IStats, ISavable
     //Stats that are added from leveling up, using items etc.
     [SerializeField] Stats stats = null;
 
+    public string CharacterName => characterBase.CharacterName;
+
     public delegate void StatsLoaded(PlayerStats stats);
     public static event StatsLoaded OnStatsLoaded;
+
+    public delegate void StatChanged(StatType type, int value);
+    public static event StatChanged OnStatChanged;
 
     void Start()
     {
@@ -23,7 +28,13 @@ public class PlayerStats : MonoBehaviour, IStats, ISavable
 
     public bool TryModifyStat(StatType stat, int value)
     {
-        return stats.TryModifyStat(stat, value);
+        if (stats.TryModifyStat(stat, value))
+        {
+            int newValue = GetStatValue(stat);
+            OnStatChanged?.Invoke(stat, newValue);
+            return true;
+        }
+        return false;
     }
 
     public object CaptureState()

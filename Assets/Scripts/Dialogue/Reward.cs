@@ -5,23 +5,17 @@ public class Reward
 {
     [SerializeField] ItemInformation[] itemRewards = null;
 
-    public bool CanGiveRewards(GameObject player, out string errorMessage)
-    {     
-        errorMessage = "";
+    public bool TryGiveRewards(GameObject player, out string error)
+    {
+        error = "";
         if (itemRewards.Length > 0 && player.TryGetComponent(out PlayerInventory inventory))
         {
-            if (!inventory.HasRoom(itemRewards))
+            if (!inventory.TryGiveItems(itemRewards))
             {
-                errorMessage = "Not enough inventory space.";
+                error = "Not enough inventory space.";
                 return false;
             }         
         }
         return true;
-    }
-
-    public void GiveRewards(GameObject player)
-    {
-        //if (itemRewards.Length > 0 && player.TryGetComponent(out PlayerInventory inventory))
-        //    inventory.GiveItems();
     }
 }

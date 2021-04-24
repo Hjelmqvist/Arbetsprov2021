@@ -22,10 +22,9 @@ public class DialogueChoice
 
     public void SelectChoice(GameObject user)
     {
-        if (rewards.CanGiveRewards(user, out string error))
+        if (rewards.TryGiveRewards(user, out string error))
         {
             requirements.FulfillRequirements(user);
-            rewards.GiveRewards(user);
             connectingDialogue.SelectNode(user);
         }
         else

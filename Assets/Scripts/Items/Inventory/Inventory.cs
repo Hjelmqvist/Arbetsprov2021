@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
 [System.Serializable]
 public class Inventory
@@ -17,15 +16,69 @@ public class Inventory
     {
         if (HasRoom(items, out var foundSlots))
         {
+            foreach (ItemInformation info in items)
+            {
+                int amount = info.amount;
+                foreach (InventorySlot slot in foundSlots[info.item.ItemName])
+                {
+                    if (slot.HasItem)
+                    {
+                        int amountToAdd = info.item.MaxStack - slot.Item.Amount;
+                        amountToAdd = Mathf.Clamp(amountToAdd, amountToAdd, info.item.MaxStack);
+                        slot.Item.ModifyAmount(amountToAdd);
+                        amount -= amountToAdd;
+                    }
+                    else
+                    {
+                        int amountToAdd = Mathf.Clamp(amount, amount, info.item.MaxStack);
+                        slot.SetItem(info.item.GetItemInstance(amountToAdd));
+                        amount -= amountToAdd;
+                    }
 
+                    //Done
+                    if (amount <= 0)
+                        break;
+                }
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public bool HasRoom(ItemInformation[] items, out Dictionary<string, InventorySlot[]> foundSlots)
+    private bool HasRoom(ItemInformation[] items, out Dictionary<string, InventorySlot[]> foundSlots)
     {
-        //TODO: Check if inventory has enough space. Reverse ContainsItems pretty much
-        throw new NotImplementedException();
+        Dictionary<string, InventorySlot[]> specifiedItemSlots = new Dictionary<string, InventorySlot[]>();
+        List<InventorySlot> takenSlots = new List<InventorySlot>();
+        foreach (ItemInformation item in items)
+        {
+            List<InventorySlot> slotsForThisItem = new List<InventorySlot>();
+            int amountNeeded = item.amount;
+
+            //Stackable slots then empty slots
+            List<InventorySlot> itemSlots = slots.Where(x => x.HasItem && x.Item.IsSameType(item.item) && !takenSlots.Contains(x)).ToList(); 
+            itemSlots.AddRange(slots.Where(x => !x.HasItem && !takenSlots.Contains(x)));
+            foreach (InventorySlot slot in itemSlots)
+            {
+                int availableSpace = slot.HasItem ? item.item.MaxStack - slot.Item.Amount : item.item.MaxStack;
+                if (availableSpace > 0)
+                {
+                    takenSlots.Add(slot);
+                    slotsForThisItem.Add(slot);
+                    amountNeeded -= availableSpace;
+                    if (amountNeeded <= 0)
+                        break;
+                }
+            }
+            if (amountNeeded <= 0)
+            {
+                specifiedItemSlots[item.item.ItemName] = slotsForThisItem.ToArray();
+                continue;
+            }
+            foundSlots = null;
+            return false;
+        }
+        foundSlots = specifiedItemSlots;
+        return true;
     }
 
     /* METHODS FOR TAKING ITEMS */
@@ -61,20 +114,20 @@ public class Inventory
         return false;
     }
 
-    public bool ContainsItems(ItemInformation[] lookups, out Dictionary<string, InventorySlot[]> foundSlots)
+    public bool ContainsItems(ItemInformation[] items, out Dictionary<string, InventorySlot[]> foundSlots)
     {
         Dictionary<string, InventorySlot[]> specifiedItemSlots = new Dictionary<string, InventorySlot[]>();
 
-        foreach (ItemInformation lookup in lookups)
+        foreach (ItemInformation item in items)
         {
-            InventorySlot[] slotsWithItems = slots.Where(x => x.Item != null && x.Item.IsSameType(lookup.item)).ToArray();
+            InventorySlot[] slotsWithItems = slots.Where(x => x.HasItem && x.Item.IsSameType(item.item)).ToArray();
             int totalAmount = slotsWithItems.Sum(x => x.Item.Amount);
-            if (totalAmount < lookup.amount)
+            if (totalAmount < item.amount)
             {
                 foundSlots = null;
                 return false;
             }
-            specifiedItemSlots.Add(lookup.item.ItemName, slotsWithItems);
+            specifiedItemSlots.Add(item.item.ItemName, slotsWithItems);
         }
         foundSlots = specifiedItemSlots;
         return true;

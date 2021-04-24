@@ -12,8 +12,8 @@ public class WeaponSO : ItemSO
 
     public enum Enhancement { CritRate, CritDmg, EleMastery, Recharge, Atk }
 
-    public override Item GetItemInstance()
+    public override Item GetItemInstance(int amount = 1)
     {
-        return new Weapon(ItemName);
+        return new Weapon(ItemName, amount);
     }
 }

@@ -3,7 +3,7 @@
 [System.Serializable]
 public class Consumable : Item
 {
-    public Consumable(string name) : base(name) { }
+    public Consumable(string name, int amount) : base(name, amount) { }
 
     public override void Use(GameObject user)
     {

@@ -7,8 +7,8 @@ public class ConsumableSO : ItemSO
 
     public ConsumableEffect[] Effects => effects;
 
-    public override Item GetItemInstance()
+    public override Item GetItemInstance(int amount = 1)
     {
-        return new Consumable(ItemName);
+        return new Consumable(ItemName, amount);
     }
 }
