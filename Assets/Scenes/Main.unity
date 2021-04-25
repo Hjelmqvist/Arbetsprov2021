@@ -945,7 +945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   req:
     itemsInInventory:
-    - item: {fileID: 11400000, guid: 5fbd208c01e4fb44eb1f230b9b32d778, type: 2}
+    - item: {fileID: 0}
       amount: 0
     itemsToTake:
     - item: {fileID: 11400000, guid: f185590487900c84eb53ad60b3bfcb95, type: 2}
@@ -979,20 +979,20 @@ MonoBehaviour:
   inventory:
     slots:
     - currentItem:
-        itemName: Banana
-        amount: 5
+        itemName: 
+        amount: 0
     - currentItem:
-        itemName: Health Potion
-        amount: 3
+        itemName: 
+        amount: 0
     - currentItem:
-        itemName: Sword
-        amount: 1
+        itemName: 
+        amount: 0
     - currentItem:
-        itemName: Banana
-        amount: 4
+        itemName: 
+        amount: 0
     - currentItem:
-        itemName: Banana
-        amount: 4
+        itemName: 
+        amount: 0
     - currentItem:
         itemName: 
         amount: 0

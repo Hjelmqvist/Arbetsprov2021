@@ -14,15 +14,10 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     static InventorySlot fromSlot = null;
     static InventorySlot toSlot = null;
 
-    //TODO: Use one event with enum instead.
-    public delegate void DragItemStart(Item item);
-    public static event DragItemStart OnBeginDragItem;
+    public enum SlotAction { BeginDrag, Drag, EndDrag, PointerEnter, PointerExit };
 
-    public delegate void DragItem(Vector2 pos);
-    public static event DragItem OnDragItem;
-
-    public delegate void DragItemEnd();
-    public static event DragItemEnd OnDragItemEnd;
+    public delegate void SlotChange(InventorySlot slot, SlotAction action);
+    public static event SlotChange OnSlotChange;
 
     public void SetInventorySlot(InventorySlot newSlot)
     {
@@ -58,22 +53,27 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (slot.HasItem)
         {
             fromSlot = slot;
-            OnBeginDragItem?.Invoke(slot.Item);
+            OnSlotChange?.Invoke(slot, SlotAction.BeginDrag);
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        OnDragItem?.Invoke(Input.mousePosition);
+        if (slot.HasItem)
+            OnSlotChange?.Invoke(slot, SlotAction.Drag);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        OnDragItemEnd?.Invoke();
+        if (slot.HasItem)
+            OnSlotChange?.Invoke(slot, SlotAction.EndDrag);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (fromSlot == null || toSlot == null)
+            return;
+
         if (fromSlot.Item.IsSameType(toSlot.Item) && fromSlot.Item.TryGetInformation(out ItemSO info) && info.IsStackable)
         {
             //Stack items
@@ -92,16 +92,20 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             toSlot.SetItem(fromSlot.Item);
             fromSlot.SetItem(temp);
         }
-        OnDragItemEnd?.Invoke();
+        fromSlot = null;
+        toSlot = null;
+        OnSlotChange?.Invoke(slot, SlotAction.EndDrag);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         toSlot = slot;
+        OnSlotChange?.Invoke(slot, SlotAction.PointerEnter);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         toSlot = null;
+        OnSlotChange?.Invoke(slot, SlotAction.PointerExit);
     }
 }

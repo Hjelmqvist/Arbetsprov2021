@@ -24,7 +24,9 @@ public class Inventory
                     if (slot.HasItem)
                     {
                         int amountToAdd = info.item.MaxStack - slot.Item.Amount;
-                        amountToAdd = Mathf.Clamp(amountToAdd, amountToAdd, info.item.MaxStack);
+                        if (amountToAdd > amount)
+                            amountToAdd = amount;
+                        amountToAdd = Mathf.Clamp(amountToAdd, 0, info.item.MaxStack);
                         slot.Item.ModifyAmount(amountToAdd);
                         amount -= amountToAdd;
                     }

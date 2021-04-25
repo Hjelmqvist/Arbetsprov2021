@@ -15,6 +15,8 @@ public class Item
     public virtual string ItemName => itemName;
     public int Amount => amount;
 
+    public delegate void ItemChanged(Item item);
+    public event ItemChanged OnItemChanged;
 
     public Item(string name, int amount)
     {
@@ -34,8 +36,10 @@ public class Item
             if (overflow < 0)
                 overflow = 0;
             this.amount -= overflow;
+            OnItemChanged?.Invoke(this);
             return overflow;
         }
+        Debug.Log($"{itemName} is missing an SO");
         return amount;
     }
 

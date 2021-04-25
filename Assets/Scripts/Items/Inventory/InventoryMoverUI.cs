@@ -7,34 +7,33 @@ public class InventoryMoverUI : MonoBehaviour
 
     private void OnEnable()
     {
-        InventorySlotUI.OnBeginDragItem += InventorySlotUI_OnBeginDragItem;
-        InventorySlotUI.OnDragItem += InventorySlotUI_OnDragItem;
-        InventorySlotUI.OnDragItemEnd += InventorySlotUI_OnDragItemEnd;
+        InventorySlotUI.OnSlotChange += InventorySlotUI_OnSlotChange;
     }
 
     private void OnDisable()
     {
-        InventorySlotUI.OnBeginDragItem -= InventorySlotUI_OnBeginDragItem;
-        InventorySlotUI.OnDragItem -= InventorySlotUI_OnDragItem;
-        InventorySlotUI.OnDragItemEnd -= InventorySlotUI_OnDragItemEnd;
+        InventorySlotUI.OnSlotChange -= InventorySlotUI_OnSlotChange;
     }
 
-    private void InventorySlotUI_OnBeginDragItem(Item item)
+    private void InventorySlotUI_OnSlotChange(InventorySlot slot, InventorySlotUI.SlotAction action)
     {
-        if (item != null && item.TryGetInformation(out ItemSO info))
+        switch (action)
         {
-            image.sprite = info.Icon;
-            image.enabled = true;
-        }   
-    }
-
-    private void InventorySlotUI_OnDragItem(Vector2 pos)
-    {
-        transform.position = pos;
-    }
-
-    private void InventorySlotUI_OnDragItemEnd()
-    {
-        image.enabled = false;
+            case InventorySlotUI.SlotAction.BeginDrag:
+                if (slot.HasItem && slot.Item.TryGetInformation(out ItemSO info))
+                {
+                    image.sprite = info.Icon;
+                    image.enabled = true;
+                }
+                break;
+            case InventorySlotUI.SlotAction.Drag:
+                transform.position = Input.mousePosition;
+                break;
+            case InventorySlotUI.SlotAction.EndDrag:
+                image.enabled = false;
+                break;
+            default:
+                break;
+        }
     }
 }

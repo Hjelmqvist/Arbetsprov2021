@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de5aafc30daa3e045b02a7169e80395e, type: 3}
-  m_Name: Health Potion
+  m_Script: {fileID: 11500000, guid: 199e816cff8ee8a4a8e4e7876caad103, type: 3}
+  m_Name: GoldCoin
   m_EditorClassIdentifier: 
-  itemName: Health Potion
-  description: Restores 100 HP.
-  icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  maxStack: 20
-  effects:
-  - effect: 0
-    value: 100
+  itemName: Gold Coin
+  description: A coin made out of gold.
+  icon: {fileID: 21300000, guid: b7169c21225b1f04ab520fd934e0cd2c, type: 3}
+  maxStack: 99

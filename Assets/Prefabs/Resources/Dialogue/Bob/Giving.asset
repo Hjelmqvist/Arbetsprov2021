@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abea1c9408c09e84399dcec428e448cf, type: 3}
-  m_Name: Bananas
+  m_Name: Giving
   m_EditorClassIdentifier: 
   messages:
   - character: Bob
-    message: Wow! Thank you so very much!
+    message: Okay, but only for testing purposes!
+  - character: Bob
+    message: Here you go!
