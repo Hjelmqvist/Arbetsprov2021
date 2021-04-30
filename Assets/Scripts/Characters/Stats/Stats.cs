@@ -17,6 +17,27 @@ public class Stats : IStats
     /// </summary>
     public int GetStatValue(StatType stat)
     {
+        InitializeStats();
+        return stats.TryGetValue(stat, out int value) ? value : 0;
+    }
+
+    public bool TryModifyStat(StatType stat, int value)
+    {
+        InitializeStats();
+        if (stats.TryGetValue(stat, out int value2))
+        {
+            value2 += value;
+            stats[stat] = value2;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Creates the stats dictionary if its not made already
+    /// </summary>
+    private void InitializeStats()
+    {
         if (stats == null)
         {
             //Setup here in order to use the variables
@@ -26,17 +47,5 @@ public class Stats : IStats
                 { StatType.Intelligence, intelligence }
             };
         }
-        return stats.TryGetValue(stat, out int value) ? value : 0;
-    }
-
-    public bool TryModifyStat(StatType stat, int value)
-    {
-        if (stats.TryGetValue(stat, out int value2))
-        {
-            value2 += value;
-            stats[stat] = value2;
-            return true;
-        }
-        return false;
     }
 }

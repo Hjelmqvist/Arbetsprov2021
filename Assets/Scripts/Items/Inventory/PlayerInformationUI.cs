@@ -38,7 +38,6 @@ public class PlayerInformationUI : MonoBehaviour
     private void PlayerStats_OnStatsLoaded(PlayerStats stats)
     {
         nameText.text = $"Name: {stats.CharacterName}";
-
         for (StatType type = StatType.Strength; type <= StatType.Intelligence; type++)
         {
             if ((int)type > statTexts.Length)

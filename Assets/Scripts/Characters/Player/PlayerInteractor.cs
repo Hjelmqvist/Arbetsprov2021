@@ -12,7 +12,6 @@ public class PlayerInteractor : MonoBehaviour
     
     void Update()
     {
-        //TODO: Interactable list?
         //Interact with first interactable when key is pressed down
         if (canInteract && Input.GetButtonDown(interactButton))
         {

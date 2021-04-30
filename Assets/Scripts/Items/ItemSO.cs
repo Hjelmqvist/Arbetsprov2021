@@ -20,7 +20,7 @@ public class ItemSO : ScriptableObject
 
     static Dictionary<string, ItemSO> itemDatabase = null;
 
-    public static bool TryGetItem<T>(string itemID, out T foundItem) where T : ItemSO
+    public static bool TryGetItem<T>(string itemName, out T foundItem) where T : ItemSO
     {
         if (itemDatabase == null)
         {
@@ -32,7 +32,7 @@ public class ItemSO : ScriptableObject
                     itemDatabase[item.itemName] = item;
             }
         }
-        foundItem = itemDatabase.TryGetValue(itemID, out ItemSO value) ? (T)value : null;
+        foundItem = itemDatabase.TryGetValue(itemName, out ItemSO value) ? (T)value : null;
         return foundItem != null;
     }
 

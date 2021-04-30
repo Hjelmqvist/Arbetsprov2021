@@ -15,4 +15,4 @@ MonoBehaviour:
   itemName: Purple Coin
   description: A purple coin.
   icon: {fileID: 21300000, guid: a8b2dd49f82df4243b372efd8a053dfd, type: 3}
-  maxStack: 99
+  maxStack: 1
